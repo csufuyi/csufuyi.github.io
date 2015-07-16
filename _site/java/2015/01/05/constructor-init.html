@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Java构造器和枚举的初始化 - 9leg</title>
+        <!-- meta -->
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+        <meta name="generator" content="Jekyll" />
+        <meta name="author" content="zhujiajun" />
+        <meta name="description" content="java技术文章" />
+        <meta name="keywords" content="Java blog,Post" />
+        <!-- atom -->
+        <link rel="alternate" type="application/atom+xml" title="Recent Entries" href="http://9leg.com/atom.xml" />
+        <link rel="shortcut icon" href="/images/shortcut.jpg" type="image/x-icon" />
+        <!-- font-awesome -->
+        <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
+        <link href='http://fonts.useso.com/css?family=Spirax' rel='stylesheet' type='text/css'>
+        <link rel="stylesheet" href="http://9leg.com/css/syntax.css">
+        <link rel="stylesheet" href="http://9leg.com/css/main.css">
+        
+        
+
+    </head>
+    <body>
+        <div class="head fn-clear">
+            <div class="header">
+                <h1 class="logo">
+                    <a href="http://9leg.com"><i class="icon-anchor"></i></a>
+                </h1>
+                <nav class="nav">
+                    <ul>
+                        
+                        
+                        
+                        <li class="nav-item ">
+                            <a href="http://9leg.com/index.html">
+                                首页
+                            </a>
+                            
+                        </li>
+                        
+                        
+                        
+                        <li class="nav-item ">
+                            <a href="http://9leg.com/categories.html">
+                                分类目录
+                            </a>
+                            
+                        </li>
+                        
+                        
+                        
+                        <li class="nav-item ">
+                            <a href="http://9leg.com/archives.html">
+                                文章归档
+                            </a>
+                            
+                        </li>
+                        
+                        
+                        
+                        <li class="nav-item ">
+                            <a href="http://9leg.com/about.html">
+                                关于我
+                            </a>
+                            
+                        </li>
+                        
+                        
+                        
+                        <li class="nav-item ">
+                            <a href="http://9leg.com/links.html">
+                                友情链接
+                            </a>
+                            
+                        </li>
+                        
+                    </ul>
+                </nav>
+                <div class="follow">
+                    
+                    <a href="/atom.xml" target="_blank"><i class="icon-rss"></i></a>
+                    
+                    <a href="http://weibo.com/" target="_blank"><i class="icon-weibo"></i></a>
+                    
+                    <a href="http://facebook.com/" target="_blank"><i class="icon-facebook"></i></a>
+                    
+                    <a href="https://github.com/zJiaJun/" target="_blank"><i class="icon-github-alt"></i></a>
+                    
+                    <a href="http://twitter.com/" target="_blank"><i class="icon-twitter"></i></a>
+                    
+                    <a href="https://plus.google.com/116595571760191938657/about" target="_blank"><i class="icon-google-plus"></i></a>
+                    
+                </div>
+            </div>
+        </div>
+        <div class="contain fn-clear">
+            <div class="container fn-clear">
+                <div class="main">
+                    <div class="article article-post">
+    <h2 class="title">Java构造器和枚举的初始化</h2>
+    <div class="info">
+        <span class="info-title"><i class="icon-calendar"></i> Published: </span>
+        <span class="info-date">05 Jan 2015</span>
+        <span class="info-title"><i class="icon-folder-open"></i> Category: </span>
+        <span class="info-link"><a href="http://9leg.com/categories.html#java-ref" >java</a></span>
+    </div>
+    <p>最近读完了ThinkInJava的第5章初始化与清理，在这里做下简单的总结，以加深影响。</p>
+
+<h3 id="section">构造器初始化</h3>
+<p>无论创建多少个对象，静态数据都只占用一份存储区域。static关键字不能应用于局部变量，因此它只能作用于域。来看下面的例子：</p>
+
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">class</span> <span class="nc">Bowl</span> <span class="o">{</span>
+  <span class="n">Bowl</span><span class="o">(</span><span class="kt">int</span> <span class="n">marker</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">print</span><span class="o">(</span><span class="s">&quot;Bowl(&quot;</span> <span class="o">+</span> <span class="n">marker</span> <span class="o">+</span> <span class="s">&quot;)&quot;</span><span class="o">);</span>
+  <span class="o">}</span>
+  <span class="kt">void</span> <span class="nf">f1</span><span class="o">(</span><span class="kt">int</span> <span class="n">marker</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">print</span><span class="o">(</span><span class="s">&quot;f1(&quot;</span> <span class="o">+</span> <span class="n">marker</span> <span class="o">+</span> <span class="s">&quot;)&quot;</span><span class="o">);</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="kd">class</span> <span class="nc">Table</span> <span class="o">{</span>
+  <span class="kd">static</span> <span class="n">Bowl</span> <span class="n">bowl1</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">Bowl</span><span class="o">(</span><span class="mi">1</span><span class="o">);</span>
+  <span class="n">Table</span><span class="o">()</span> <span class="o">{</span>
+    <span class="n">print</span><span class="o">(</span><span class="s">&quot;Table()&quot;</span><span class="o">);</span>
+    <span class="n">bowl2</span><span class="o">.</span><span class="na">f1</span><span class="o">(</span><span class="mi">1</span><span class="o">);</span>
+  <span class="o">}</span>
+  <span class="kt">void</span> <span class="nf">f2</span><span class="o">(</span><span class="kt">int</span> <span class="n">marker</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">print</span><span class="o">(</span><span class="s">&quot;f2(&quot;</span> <span class="o">+</span> <span class="n">marker</span> <span class="o">+</span> <span class="s">&quot;)&quot;</span><span class="o">);</span>
+  <span class="o">}</span>
+  <span class="kd">static</span> <span class="n">Bowl</span> <span class="n">bowl2</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">Bowl</span><span class="o">(</span><span class="mi">2</span><span class="o">);</span>
+<span class="o">}</span>
+
+<span class="kd">class</span> <span class="nc">Cupboard</span> <span class="o">{</span>
+  <span class="n">Bowl</span> <span class="n">bowl3</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">Bowl</span><span class="o">(</span><span class="mi">3</span><span class="o">);</span>
+  <span class="kd">static</span> <span class="n">Bowl</span> <span class="n">bowl4</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">Bowl</span><span class="o">(</span><span class="mi">4</span><span class="o">);</span>
+  <span class="n">Cupboard</span><span class="o">()</span> <span class="o">{</span>
+    <span class="n">print</span><span class="o">(</span><span class="s">&quot;Cupboard()&quot;</span><span class="o">);</span>
+    <span class="n">bowl4</span><span class="o">.</span><span class="na">f1</span><span class="o">(</span><span class="mi">2</span><span class="o">);</span>
+  <span class="o">}</span>
+  <span class="kt">void</span> <span class="nf">f3</span><span class="o">(</span><span class="kt">int</span> <span class="n">marker</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">print</span><span class="o">(</span><span class="s">&quot;f3(&quot;</span> <span class="o">+</span> <span class="n">marker</span> <span class="o">+</span> <span class="s">&quot;)&quot;</span><span class="o">);</span>
+  <span class="o">}</span>
+  <span class="kd">static</span> <span class="n">Bowl</span> <span class="n">bowl5</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">Bowl</span><span class="o">(</span><span class="mi">5</span><span class="o">);</span>
+<span class="o">}</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">StaticInitialization</span> <span class="o">{</span>
+  <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">print</span><span class="o">(</span><span class="s">&quot;Creating new Cupboard() in main&quot;</span><span class="o">);</span>
+    <span class="k">new</span> <span class="nf">Cupboard</span><span class="o">();</span>
+    <span class="n">print</span><span class="o">(</span><span class="s">&quot;Creating new Cupboard() in main&quot;</span><span class="o">);</span>
+    <span class="k">new</span> <span class="nf">Cupboard</span><span class="o">();</span>
+    <span class="n">table</span><span class="o">.</span><span class="na">f2</span><span class="o">(</span><span class="mi">1</span><span class="o">);</span>
+    <span class="n">cupboard</span><span class="o">.</span><span class="na">f3</span><span class="o">(</span><span class="mi">1</span><span class="o">);</span>
+  <span class="o">}</span>
+  <span class="kd">static</span> <span class="n">Table</span> <span class="n">table</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">Table</span><span class="o">();</span>
+  <span class="kd">static</span> <span class="n">Cupboard</span> <span class="n">cupboard</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">Cupboard</span><span class="o">();</span>
+<span class="o">}</span></code></pre></div>
+
+<p>Output:</p>
+
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">Bowl</span><span class="o">(</span><span class="mi">1</span><span class="o">)</span>
+<span class="n">Bowl</span><span class="o">(</span><span class="mi">2</span><span class="o">)</span>
+<span class="n">Table</span><span class="o">()</span>
+<span class="n">f1</span><span class="o">(</span><span class="mi">1</span><span class="o">)</span>
+<span class="n">Bowl</span><span class="o">(</span><span class="mi">4</span><span class="o">)</span>
+<span class="n">Bowl</span><span class="o">(</span><span class="mi">5</span><span class="o">)</span>
+<span class="n">Bowl</span><span class="o">(</span><span class="mi">3</span><span class="o">)</span>
+<span class="n">Cupboard</span><span class="o">()</span>
+<span class="n">f1</span><span class="o">(</span><span class="mi">2</span><span class="o">)</span>
+<span class="n">Creating</span> <span class="k">new</span> <span class="nf">Cupboard</span><span class="o">()</span> <span class="n">in</span> <span class="n">main</span>
+<span class="nf">Bowl</span><span class="o">(</span><span class="mi">3</span><span class="o">)</span>
+<span class="n">Cupboard</span><span class="o">()</span>
+<span class="n">f1</span><span class="o">(</span><span class="mi">2</span><span class="o">)</span>
+<span class="n">Creating</span> <span class="k">new</span> <span class="nf">Cupboard</span><span class="o">()</span> <span class="n">in</span> <span class="n">main</span>
+<span class="nf">Bowl</span><span class="o">(</span><span class="mi">3</span><span class="o">)</span>
+<span class="n">Cupboard</span><span class="o">()</span>
+<span class="n">f1</span><span class="o">(</span><span class="mi">2</span><span class="o">)</span>
+<span class="n">f2</span><span class="o">(</span><span class="mi">1</span><span class="o">)</span>
+<span class="n">f3</span><span class="o">(</span><span class="mi">1</span><span class="o">)</span></code></pre></div>
+
+<p>由输出可见，静态初始化只有在必要时刻才会进行。如果不创建Table对象，也不引用Table.b1或Table.b2,那么静态的Bowl b1和b2永远都不会创建。只有在第一个Table对象被创建(或者第一次访问静态数据)的时候，它们才会被初始化。此后，静态对象不会再被初始化。
+初始化的顺序是先静态对象，而后是“非静态”对象。从输出结果中可以看到这一点。要执行main()静态方法，必须加载StaticInitialization类，然后其静态域table和cupboard被初始化，这将导致它们对应的类也被加载，并且它们也都包含静态bowl对象，因此bowl随后也被加载。
+总结一下对象的创建过程，假设有个名为Dog的类：</p>
+
+<ol>
+  <li>即使没有显式地使用static关键字，构造器实际上也是静态方法。因此，当首次创建类型为Dog的对象时，或者Dog类的静态方法或静态域首次被访问时，java解释器必须查找类路径，以定位Dog.class文件。</li>
+  <li>然后载入Dog.class，有关静态初始化的所有动作读都会执行。因此，静态初始化只在Class对象首次加载的时候进行一次。</li>
+  <li>当用new Dog()创建对象的时候，首先将在堆上为Dog对象分配足够的存储空间。</li>
+  <li>这块存储空间会被清零，这就自动地将Dog对象中的所用基本类型数据都设置成了默认值，而引用则被设置成了null。</li>
+  <li>执行所用出现于字段定义处的初始化动作。</li>
+  <li>执行构造器。这里面又涉及到很多动作，如继承的时候。</li>
+</ol>
+
+<h3 id="section-1">枚举初始化</h3>
+<p>在创建enum时，编译器会自动添加一些有用的特性。例如，它会创建toString()方法，以便可以很方便地显示某个enum实例。编译器还会创建ordinal()方法，用来表示某个特定enum常量的声明顺序，以及static values()方法，用来按照enum常量的声明顺序，产生由这些常量值构成的数组。
+enum关键字只是为生成对应的类时，产生了某些编译器行为，因此很大程度上，可以将enum当作其他任何类处理。</p>
+
+<p>原创文章转载请注明出处：<a href="http://www.9leg.com/java/2015/01/04/constructor-init.html">Java构造器和枚举的初始化</a></p>
+
+    <div class="bdsharebuttonbox">
+        <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+        <a href="#" class="bds_douban" data-cmd="douban" title="分享到豆瓣网"></a>
+        <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+        <a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博"></a>
+        <a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网"></a>
+        <a href="#" class="bds_mail" data-cmd="mail" title="分享到邮件分享"></a>
+        <a href="#" class="bds_more" data-cmd="more"></a>
+    </div>
+    <nav class="article-previous fn-clear">
+        
+        <a class="prev" href="/java/2015/01/02/how-to-properly-use-this.html" rel="bookmark">&laquo;&nbsp;this的由来和正确的使用方式</a>
+        
+        
+        <a class="next" href="/java/2015/01/07/final-keyword.html" rel="bookmark">Java的final关键字&nbsp;&raquo;</a>
+        
+    </nav>
+    <div class="comment">
+        
+        <div id="disqus_thread"></div>
+        
+    </div>
+</div>
+
+                </div>
+                <div class="aside">
+                    <div class="aside-contact">
+                        <h4 class="title">About me</h4>
+                        <div class="det fn-clear">
+                            <div class="det-image">
+                                <img src="/images/header.jpg" />
+                            </div>
+                            <div class="det-text">
+                                <p>贵在坚持 让梦想照进现实</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="aside-item">
+                        <h4 class="title">Recent Posts</h4>
+                        <ul class="list">
+                            
+                                <li><a href="http://9leg.com/android/2015/07/13/whats-the-difference-between-commit-and-apply-in-shared-preference.html" title="SharedPreference.Editor中commit和apply区别" rel="bookmark">SharedPreference.Editor中commit和apply区别</a></li>
+                            
+                                <li><a href="http://9leg.com/maven/2015/06/30/maven-import-local-jar-and-packing-jar.html" title="Maven引入本地jar包并生成jar包运行修改MANIFEST.MF文件" rel="bookmark">Maven引入本地jar包并生成jar包运行修改MANIFEST.MF文件</a></li>
+                            
+                                <li><a href="http://9leg.com/java/2015/05/07/string-recursive.html" title="String中的无意识递归" rel="bookmark">String中的无意识递归</a></li>
+                            
+                                <li><a href="http://9leg.com/spring/2015/05/06/spring-annotation-primary.html" title="Spring注解@Primary" rel="bookmark">Spring注解@Primary</a></li>
+                            
+                                <li><a href="http://9leg.com/spring/2015/02/12/spring-propertysource-value-annotations-example.html" title="Spring的@PropertySource和@Value注解例子" rel="bookmark">Spring的@PropertySource和@Value注解例子</a></li>
+                            
+                                <li><a href="http://9leg.com/maven/2015/02/01/why-is-mvn-archetype-generate-so-low.html" title="用maven骨架生成项目速度慢的问题" rel="bookmark">用maven骨架生成项目速度慢的问题</a></li>
+                            
+                        </ul>
+                    </div>
+
+                    <div class="aside-item">
+                        <h4 class="title">Links</h4>
+                        <ul class="list">
+                            
+                                
+                                    
+                                    <li><a href="http://droidyue.com/" title="技术小黑屋" target="_blank">技术小黑屋</a></li>
+                                    
+                                    <li><a href="http://jekyllrb.com" title="Jekyll" target="_blank">Jekyll</a></li>
+                                    
+                                    <li><a href="http://www.zhanxin.info/themes.html" title="Jekyll Theme" target="_blank">Jekyll Theme</a></li>
+                                    
+                                
+                            
+                                
+                            
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="foot">
+            <div class="footer">
+                <p>Copyright 2013. All rights reserved. Powered by <a href="http://jekyllrb.com" target="_blank">Jekyll</a>, Design by <a href="http://www.zhanxin.info" target="_blank">zhanxin.info</a>.沪ICP备14040864号</p>
+            </div>
+        </div>
+        <script type="text/javascript" src="http://ajax.useso.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+        
+            
+            <script type="text/javascript">
+                //disqus
+                var disqus_shortname = 'csufuyi';
+                (function() {
+                    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                    dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+                    (document.getElementsByTagName('head')[0] ||
+                        document.getElementsByTagName('body')[0]).appendChild(dsq);
+                })();
+            </script>
+            
+        
+        
+            <script>
+                window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"1","bdSize":"16"},"share":{},"image":{"viewList":["weixin","douban","tsina","tqq","renren","mail"],"viewText":"分享到：","viewSize":"16"},"selectShare":{"bdContainerClass":null,"bdSelectMiniList":["weixin","douban","tsina","tqq","renren","mail"]}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+            </script>
+        
+    </body>
+</html>

@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Spring注解@Primary - 9leg</title>
+        <!-- meta -->
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+        <meta name="generator" content="Jekyll" />
+        <meta name="author" content="zhujiajun" />
+        <meta name="description" content="java技术文章" />
+        <meta name="keywords" content="Java blog,Post" />
+        <!-- atom -->
+        <link rel="alternate" type="application/atom+xml" title="Recent Entries" href="http://9leg.com/atom.xml" />
+        <link rel="shortcut icon" href="/images/shortcut.jpg" type="image/x-icon" />
+        <!-- font-awesome -->
+        <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
+        <link href='http://fonts.useso.com/css?family=Spirax' rel='stylesheet' type='text/css'>
+        <link rel="stylesheet" href="http://9leg.com/css/syntax.css">
+        <link rel="stylesheet" href="http://9leg.com/css/main.css">
+        
+        
+
+    </head>
+    <body>
+        <div class="head fn-clear">
+            <div class="header">
+                <h1 class="logo">
+                    <a href="http://9leg.com"><i class="icon-anchor"></i></a>
+                </h1>
+                <nav class="nav">
+                    <ul>
+                        
+                        
+                        
+                        <li class="nav-item ">
+                            <a href="http://9leg.com/index.html">
+                                首页
+                            </a>
+                            
+                        </li>
+                        
+                        
+                        
+                        <li class="nav-item ">
+                            <a href="http://9leg.com/categories.html">
+                                分类目录
+                            </a>
+                            
+                        </li>
+                        
+                        
+                        
+                        <li class="nav-item ">
+                            <a href="http://9leg.com/archives.html">
+                                文章归档
+                            </a>
+                            
+                        </li>
+                        
+                        
+                        
+                        <li class="nav-item ">
+                            <a href="http://9leg.com/about.html">
+                                关于我
+                            </a>
+                            
+                        </li>
+                        
+                        
+                        
+                        <li class="nav-item ">
+                            <a href="http://9leg.com/links.html">
+                                友情链接
+                            </a>
+                            
+                        </li>
+                        
+                    </ul>
+                </nav>
+                <div class="follow">
+                    
+                    <a href="/atom.xml" target="_blank"><i class="icon-rss"></i></a>
+                    
+                    <a href="http://weibo.com/" target="_blank"><i class="icon-weibo"></i></a>
+                    
+                    <a href="http://facebook.com/" target="_blank"><i class="icon-facebook"></i></a>
+                    
+                    <a href="https://github.com/zJiaJun/" target="_blank"><i class="icon-github-alt"></i></a>
+                    
+                    <a href="http://twitter.com/" target="_blank"><i class="icon-twitter"></i></a>
+                    
+                    <a href="https://plus.google.com/116595571760191938657/about" target="_blank"><i class="icon-google-plus"></i></a>
+                    
+                </div>
+            </div>
+        </div>
+        <div class="contain fn-clear">
+            <div class="container fn-clear">
+                <div class="main">
+                    <div class="article article-post">
+    <h2 class="title">Spring注解@Primary</h2>
+    <div class="info">
+        <span class="info-title"><i class="icon-calendar"></i> Published: </span>
+        <span class="info-date">06 May 2015</span>
+        <span class="info-title"><i class="icon-folder-open"></i> Category: </span>
+        <span class="info-link"><a href="http://9leg.com/categories.html#spring-ref" >spring</a></span>
+    </div>
+    <p>假定，有如下两个类，OperaSinger and MetalSinger。</p>
+
+<h3 id="metalsinger">MetalSinger类</h3>
+
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="nd">@Component</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">MetalSinger</span> <span class="kd">implements</span> <span class="n">Singer</span> <span class="o">{</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">sing</span><span class="o">(</span><span class="n">String</span> <span class="n">lyrics</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="s">&quot;I am singing with DIO voice: &quot;</span><span class="o">+</span><span class="n">lyrics</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span></code></pre></div>
+
+<h3 id="operasinger">OperaSinger类</h3>
+
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">OperaSinger</span> <span class="kd">implements</span> <span class="n">Singer</span> <span class="o">{</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">sing</span><span class="o">(</span><span class="n">String</span> <span class="n">lyrics</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="s">&quot;I am singing in Bocelli voice: &quot;</span><span class="o">+</span><span class="n">lyrics</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span></code></pre></div>
+
+<h3 id="singer">Singer接口</h3>
+
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">Singer</span> <span class="o">{</span>
+    <span class="n">String</span> <span class="nf">sing</span><span class="o">(</span><span class="n">String</span> <span class="n">lyrics</span><span class="o">);</span>
+<span class="o">}</span></code></pre></div>
+
+<p>现在定义SingerService并且注入Singer</p>
+
+<h3 id="singerservice">SingerService类</h3>
+
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="nd">@Component</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">SingerService</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">Logger</span> <span class="n">logger</span> <span class="o">=</span> <span class="n">LoggerFactory</span><span class="o">.</span><span class="na">getLogger</span><span class="o">(</span><span class="n">SingerService</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+
+    <span class="nd">@Autowired</span>
+    <span class="kd">private</span> <span class="n">Singer</span> <span class="n">singer</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">sing</span><span class="o">(){</span>
+        <span class="k">return</span> <span class="n">singer</span><span class="o">.</span><span class="na">sing</span><span class="o">(</span><span class="s">&quot;song lyrics&quot;</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span></code></pre></div>
+
+<p>你觉得哪个Singer实现类会被注入？结果如下：</p>
+
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">I</span> <span class="n">am</span> <span class="n">singing</span> <span class="n">with</span> <span class="n">DIO</span> <span class="nl">voice:</span> <span class="n">song</span> <span class="n">lyrics</span></code></pre></div>
+
+<p>这是因为OperaSinger类未定义@Component或者@Service注解，所以Spring对于OperaSinger类完全没想法，现在加上@Component注解：</p>
+
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="nd">@Component</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">OperaSinger</span> <span class="kd">implements</span> <span class="n">Singer</span> <span class="o">{</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">sing</span><span class="o">(</span><span class="n">String</span> <span class="n">lyrics</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="s">&quot;I am singing in Bocelli voice: &quot;</span><span class="o">+</span><span class="n">lyrics</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span></code></pre></div>
+
+<p>然后，会得到异常信息:</p>
+
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">org</span><span class="o">.</span><span class="na">springframework</span><span class="o">.</span><span class="na">beans</span><span class="o">.</span><span class="na">factory</span><span class="o">.</span><span class="na">NoUniqueBeanDefinitionException</span><span class="o">:</span> <span class="n">No</span> <span class="n">qualifying</span> <span class="n">bean</span> <span class="n">of</span> <span class="n">type</span> <span class="o">[</span><span class="n">main</span><span class="o">.</span><span class="na">service</span><span class="o">.</span><span class="na">Singer</span><span class="o">]</span> <span class="n">is</span> 
+<span class="nl">defined:</span> <span class="n">expected</span> <span class="n">single</span> <span class="n">matching</span> <span class="n">bean</span> <span class="n">but</span> <span class="n">found</span> <span class="mi">2</span><span class="o">:</span> <span class="n">metalSinger</span><span class="o">,</span><span class="n">operaSinger</span></code></pre></div>
+
+<p>原因显而易见，如果有不止一个bean的相同类型，并且使用了@Autowired注解根据类型绑定bean，就会得到这个异常信息，Spring不知道如何去选择。
+现在给OperaSinger类加上@Primary注解。</p>
+
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="nd">@Primary</span>
+<span class="nd">@Component</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">OperaSinger</span> <span class="kd">implements</span> <span class="n">Singer</span> <span class="o">{</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">sing</span><span class="o">(</span><span class="n">String</span> <span class="n">lyrics</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="s">&quot;I am singing in Bocelli voice: &quot;</span><span class="o">+</span><span class="n">lyrics</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span></code></pre></div>
+
+<p>结果如下：</p>
+
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">I</span> <span class="n">am</span> <span class="n">singing</span> <span class="n">in</span> <span class="n">Bocelli</span> <span class="nl">voice:</span> <span class="n">song</span> <span class="n">lyrics</span></code></pre></div>
+
+<p>这是因为OperaSinger类加上了@Primary注解，Primary主要的，从单词意思就可以理解。
+另外解决方法是，使用@Qualifier注解使用value属性指定bean的名称。</p>
+
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="nd">@Component</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">SingerService</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">Logger</span> <span class="n">logger</span> <span class="o">=</span> <span class="n">LoggerFactory</span><span class="o">.</span><span class="na">getLogger</span><span class="o">(</span><span class="n">SingerService</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+
+    <span class="nd">@Autowired</span>
+    <span class="nd">@Qualifier</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">&quot;operaSinger&quot;</span><span class="o">)</span>
+    <span class="kd">private</span> <span class="n">Singer</span> <span class="n">singer</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">sing</span><span class="o">(){</span>
+        <span class="k">return</span> <span class="n">singer</span><span class="o">.</span><span class="na">sing</span><span class="o">(</span><span class="s">&quot;song lyrics&quot;</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span></code></pre></div>
+
+<p>原创文章转载请注明出处: <a href="http://9leg.com/spring/2015/05/05/spring-annotation-primary.html">Spring注解@Primary</a></p>
+
+<p><a href="http://www.javacodegeeks.com/2015/04/spring-annotations-i-never-had-the-chance-to-use-part-1-primary.html" target="_blank">英文原文链接</a></p>
+
+    <div class="bdsharebuttonbox">
+        <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+        <a href="#" class="bds_douban" data-cmd="douban" title="分享到豆瓣网"></a>
+        <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+        <a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博"></a>
+        <a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网"></a>
+        <a href="#" class="bds_mail" data-cmd="mail" title="分享到邮件分享"></a>
+        <a href="#" class="bds_more" data-cmd="more"></a>
+    </div>
+    <nav class="article-previous fn-clear">
+        
+        <a class="prev" href="/spring/2015/02/12/spring-propertysource-value-annotations-example.html" rel="bookmark">&laquo;&nbsp;Spring的@PropertySource和@Value注解例子</a>
+        
+        
+        <a class="next" href="/java/2015/05/07/string-recursive.html" rel="bookmark">String中的无意识递归&nbsp;&raquo;</a>
+        
+    </nav>
+    <div class="comment">
+        
+        <div id="disqus_thread"></div>
+        
+    </div>
+</div>
+
+                </div>
+                <div class="aside">
+                    <div class="aside-contact">
+                        <h4 class="title">About me</h4>
+                        <div class="det fn-clear">
+                            <div class="det-image">
+                                <img src="/images/header.jpg" />
+                            </div>
+                            <div class="det-text">
+                                <p>贵在坚持 让梦想照进现实</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="aside-item">
+                        <h4 class="title">Recent Posts</h4>
+                        <ul class="list">
+                            
+                                <li><a href="http://9leg.com/android/2015/07/13/whats-the-difference-between-commit-and-apply-in-shared-preference.html" title="SharedPreference.Editor中commit和apply区别" rel="bookmark">SharedPreference.Editor中commit和apply区别</a></li>
+                            
+                                <li><a href="http://9leg.com/maven/2015/06/30/maven-import-local-jar-and-packing-jar.html" title="Maven引入本地jar包并生成jar包运行修改MANIFEST.MF文件" rel="bookmark">Maven引入本地jar包并生成jar包运行修改MANIFEST.MF文件</a></li>
+                            
+                                <li><a href="http://9leg.com/java/2015/05/07/string-recursive.html" title="String中的无意识递归" rel="bookmark">String中的无意识递归</a></li>
+                            
+                                <li><a href="http://9leg.com/spring/2015/05/06/spring-annotation-primary.html" title="Spring注解@Primary" rel="bookmark">Spring注解@Primary</a></li>
+                            
+                                <li><a href="http://9leg.com/spring/2015/02/12/spring-propertysource-value-annotations-example.html" title="Spring的@PropertySource和@Value注解例子" rel="bookmark">Spring的@PropertySource和@Value注解例子</a></li>
+                            
+                                <li><a href="http://9leg.com/maven/2015/02/01/why-is-mvn-archetype-generate-so-low.html" title="用maven骨架生成项目速度慢的问题" rel="bookmark">用maven骨架生成项目速度慢的问题</a></li>
+                            
+                        </ul>
+                    </div>
+
+                    <div class="aside-item">
+                        <h4 class="title">Links</h4>
+                        <ul class="list">
+                            
+                                
+                                    
+                                    <li><a href="http://droidyue.com/" title="技术小黑屋" target="_blank">技术小黑屋</a></li>
+                                    
+                                    <li><a href="http://jekyllrb.com" title="Jekyll" target="_blank">Jekyll</a></li>
+                                    
+                                    <li><a href="http://www.zhanxin.info/themes.html" title="Jekyll Theme" target="_blank">Jekyll Theme</a></li>
+                                    
+                                
+                            
+                                
+                            
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="foot">
+            <div class="footer">
+                <p>Copyright 2013. All rights reserved. Powered by <a href="http://jekyllrb.com" target="_blank">Jekyll</a>, Design by <a href="http://www.zhanxin.info" target="_blank">zhanxin.info</a>.沪ICP备14040864号</p>
+            </div>
+        </div>
+        <script type="text/javascript" src="http://ajax.useso.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+        
+            
+            <script type="text/javascript">
+                //disqus
+                var disqus_shortname = 'csufuyi';
+                (function() {
+                    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                    dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+                    (document.getElementsByTagName('head')[0] ||
+                        document.getElementsByTagName('body')[0]).appendChild(dsq);
+                })();
+            </script>
+            
+        
+        
+            <script>
+                window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"1","bdSize":"16"},"share":{},"image":{"viewList":["weixin","douban","tsina","tqq","renren","mail"],"viewText":"分享到：","viewSize":"16"},"selectShare":{"bdContainerClass":null,"bdSelectMiniList":["weixin","douban","tsina","tqq","renren","mail"]}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+            </script>
+        
+    </body>
+</html>

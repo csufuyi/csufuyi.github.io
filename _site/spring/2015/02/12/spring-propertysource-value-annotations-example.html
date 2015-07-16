@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Spring的@PropertySource和@Value注解例子 - 9leg</title>
+        <!-- meta -->
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+        <meta name="generator" content="Jekyll" />
+        <meta name="author" content="zhujiajun" />
+        <meta name="description" content="java技术文章" />
+        <meta name="keywords" content="Java blog,Post" />
+        <!-- atom -->
+        <link rel="alternate" type="application/atom+xml" title="Recent Entries" href="http://9leg.com/atom.xml" />
+        <link rel="shortcut icon" href="/images/shortcut.jpg" type="image/x-icon" />
+        <!-- font-awesome -->
+        <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
+        <link href='http://fonts.useso.com/css?family=Spirax' rel='stylesheet' type='text/css'>
+        <link rel="stylesheet" href="http://9leg.com/css/syntax.css">
+        <link rel="stylesheet" href="http://9leg.com/css/main.css">
+        
+        
+
+    </head>
+    <body>
+        <div class="head fn-clear">
+            <div class="header">
+                <h1 class="logo">
+                    <a href="http://9leg.com"><i class="icon-anchor"></i></a>
+                </h1>
+                <nav class="nav">
+                    <ul>
+                        
+                        
+                        
+                        <li class="nav-item ">
+                            <a href="http://9leg.com/index.html">
+                                首页
+                            </a>
+                            
+                        </li>
+                        
+                        
+                        
+                        <li class="nav-item ">
+                            <a href="http://9leg.com/categories.html">
+                                分类目录
+                            </a>
+                            
+                        </li>
+                        
+                        
+                        
+                        <li class="nav-item ">
+                            <a href="http://9leg.com/archives.html">
+                                文章归档
+                            </a>
+                            
+                        </li>
+                        
+                        
+                        
+                        <li class="nav-item ">
+                            <a href="http://9leg.com/about.html">
+                                关于我
+                            </a>
+                            
+                        </li>
+                        
+                        
+                        
+                        <li class="nav-item ">
+                            <a href="http://9leg.com/links.html">
+                                友情链接
+                            </a>
+                            
+                        </li>
+                        
+                    </ul>
+                </nav>
+                <div class="follow">
+                    
+                    <a href="/atom.xml" target="_blank"><i class="icon-rss"></i></a>
+                    
+                    <a href="http://weibo.com/" target="_blank"><i class="icon-weibo"></i></a>
+                    
+                    <a href="http://facebook.com/" target="_blank"><i class="icon-facebook"></i></a>
+                    
+                    <a href="https://github.com/zJiaJun/" target="_blank"><i class="icon-github-alt"></i></a>
+                    
+                    <a href="http://twitter.com/" target="_blank"><i class="icon-twitter"></i></a>
+                    
+                    <a href="https://plus.google.com/116595571760191938657/about" target="_blank"><i class="icon-google-plus"></i></a>
+                    
+                </div>
+            </div>
+        </div>
+        <div class="contain fn-clear">
+            <div class="container fn-clear">
+                <div class="main">
+                    <div class="article article-post">
+    <h2 class="title">Spring的@PropertySource和@Value注解例子</h2>
+    <div class="info">
+        <span class="info-title"><i class="icon-calendar"></i> Published: </span>
+        <span class="info-date">12 Feb 2015</span>
+        <span class="info-title"><i class="icon-folder-open"></i> Category: </span>
+        <span class="info-link"><a href="http://9leg.com/categories.html#spring-ref" >spring</a></span>
+    </div>
+    <p>在这篇文章中，我们会利用Spring的<strong>@PropertySource</strong>和<strong>@Value</strong>两个注解从配置文件properties中读取值，以及如何从配置文件中的值转换为List对象。</p>
+
+<h3 id="springclass">创建Spring配置Class</h3>
+
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="nd">@Configurable</span>
+<span class="nd">@ComponentScan</span><span class="o">(</span><span class="n">basePackages</span> <span class="o">=</span> <span class="s">&quot;com.9leg.java.spring&quot;</span><span class="o">)</span>
+<span class="nd">@PropertySource</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">&quot;classpath:spring/config.properties&quot;</span><span class="o">)</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">AppConfigTest</span> <span class="o">{</span>
+    
+    <span class="nd">@Bean</span>
+    <span class="kd">public</span> <span class="n">PropertySourcesPlaceholderConfigurer</span> <span class="nf">propertyConfigInDev</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="nf">PropertySourcesPlaceholderConfigurer</span><span class="o">();</span>
+    <span class="o">}</span>
+    
+<span class="o">}</span></code></pre></div>
+
+<p>通过<strong>@PropertySource</strong>注解将properties配置文件中的值存储到Spring的
+<strong>Environment</strong>中，Environment接口提供方法去读取配置文件中的值，参数是properties文件中定义的key值。上面是读取一个配置文件，如果你想要读取多个配置文件，请看下面代码片段：</p>
+
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="nd">@PropertySource</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="o">{</span><span class="s">&quot;classpath:spring/config.properties&quot;</span><span class="o">,</span><span class="s">&quot;classpath:spring/news.properties&quot;</span><span class="o">})</span></code></pre></div>
+
+<p>在Spring 4版本中，Spring提供了一个新的注解——<strong>@PropertySources</strong>,从名字就可以猜测到它是为多配置文件而准备的。</p>
+
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="nd">@PropertySources</span><span class="o">({</span>
+<span class="nd">@PropertySource</span><span class="o">(</span><span class="s">&quot;classpath:config.properties&quot;</span><span class="o">),</span>
+<span class="nd">@PropertySource</span><span class="o">(</span><span class="s">&quot;classpath:db.properties&quot;</span><span class="o">)</span>
+<span class="o">})</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">AppConfig</span> <span class="o">{</span>
+	<span class="c1">//something</span>
+<span class="o">}</span></code></pre></div>
+
+<p>另外在Spring 4版本中，<strong>@PropertySource</strong>允许忽略不存在的配置文件。先看下面的代码片段：</p>
+
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="nd">@Configuration</span>
+<span class="nd">@PropertySource</span><span class="o">(</span><span class="s">&quot;classpath:missing.properties&quot;</span><span class="o">)</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">AppConfig</span> <span class="o">{</span>
+	<span class="c1">//something</span>
+<span class="o">}</span></code></pre></div>
+
+<p>如果missing.properties不存在或找不到,系统则会抛出异常<strong>FileNotFoundException</strong>。</p>
+
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">Caused</span> <span class="nl">by:</span> <span class="n">java</span><span class="o">.</span><span class="na">io</span><span class="o">.</span><span class="na">FileNotFoundException</span><span class="o">:</span> 
+		<span class="kd">class</span> <span class="nc">path</span> <span class="n">resource</span> <span class="o">[</span><span class="n">missiong</span><span class="o">.</span><span class="na">properties</span><span class="o">]</span> <span class="n">cannot</span> <span class="n">be</span> <span class="n">opened</span> <span class="n">because</span> <span class="n">it</span> <span class="n">does</span> <span class="n">not</span> <span class="n">exist</span></code></pre></div>
+
+<p>幸好Spring 4为我们提供了<strong>ignoreResourceNotFound</strong>属性来忽略找不到的文件</p>
+
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="nd">@Configuration</span>
+	<span class="nd">@PropertySource</span><span class="o">(</span><span class="n">value</span><span class="o">=</span><span class="s">&quot;classpath:missing.properties&quot;</span><span class="o">,</span> <span class="n">ignoreResourceNotFound</span><span class="o">=</span><span class="kc">true</span><span class="o">)</span>
+	<span class="kd">public</span> <span class="kd">class</span> <span class="nc">AppConfig</span> <span class="o">{</span>
+		<span class="c1">//something</span>
+	<span class="o">}</span></code></pre></div>
+
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="nd">@PropertySources</span><span class="o">({</span>
+		<span class="nd">@PropertySource</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">&quot;classpath:missing.properties&quot;</span><span class="o">,</span> <span class="n">ignoreResourceNotFound</span><span class="o">=</span><span class="kc">true</span><span class="o">),</span>
+		<span class="nd">@PropertySource</span><span class="o">(</span><span class="s">&quot;classpath:config.properties&quot;</span><span class="o">)</span>
+        <span class="o">})</span></code></pre></div>
+
+<p>最上面的AppConfigTest的配置代码等于如下的XML配置文件</p>
+
+<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span>
+<span class="nt">&lt;beans</span> <span class="na">xmlns=</span><span class="s">&quot;http://www.springframework.org/schema/beans&quot;</span>
+        <span class="na">xmlns:xsi=</span><span class="s">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span>
+        <span class="na">xmlns:context=</span><span class="s">&quot;http://www.springframework.org/schema/context&quot;</span>
+        <span class="na">xsi:schemaLocation=</span><span class="s">&quot;http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd</span>
+<span class="s">    http://www.springframework.org/schema/context   http://www.springframework.org/schema/context/spring-context-4.0.xsd&quot;</span><span class="nt">&gt;</span>
+ 
+    <span class="nt">&lt;context:component-scan</span> <span class="na">base-package=</span><span class="s">&quot;com.9leg.java.spring&quot;</span><span class="nt">/&gt;</span>
+ 
+    <span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">&quot;org.springframework.context.support.PropertySourcesPlaceholderConfigurer&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;ignoreUnresolvablePlaceholders&quot;</span> <span class="na">value=</span><span class="s">&quot;true&quot;</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;locations&quot;</span><span class="nt">&gt;</span>
+          <span class="nt">&lt;list&gt;</span>
+            <span class="nt">&lt;value&gt;</span>classpath:spring/config.properties<span class="nt">&lt;/value&gt;</span>
+          <span class="nt">&lt;/list&gt;</span>
+        <span class="nt">&lt;/property&gt;</span>
+      <span class="nt">&lt;/bean&gt;</span>
+<span class="nt">&lt;/beans&gt;</span></code></pre></div>
+
+<h3 id="properties">创建properties配置文件</h3>
+
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">server</span><span class="o">.</span><span class="na">name</span><span class="o">=</span><span class="mi">9</span><span class="n">leg</span><span class="o">,</span><span class="n">spring</span>
+<span class="n">server</span><span class="o">.</span><span class="na">id</span><span class="o">=</span><span class="mi">10</span><span class="o">,</span><span class="mi">11</span><span class="o">,</span><span class="mi">12</span>
+<span class="n">server</span><span class="o">.</span><span class="na">jdbc</span><span class="o">=</span><span class="n">com</span><span class="o">.</span><span class="na">mysql</span><span class="o">.</span><span class="na">jdbc</span><span class="o">.</span><span class="na">Driver</span></code></pre></div>
+
+<h3 id="section">创建一个简单的服务</h3>
+
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="nd">@Component</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">&quot;mockConfigTest&quot;</span><span class="o">)</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">MockConfigTest</span> <span class="o">{</span>
+
+    <span class="nd">@Value</span><span class="o">(</span><span class="s">&quot;#{&#39;${server.name}&#39;.split(&#39;,&#39;)}&quot;</span><span class="o">)</span>
+    <span class="kd">private</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">servers</span><span class="o">;</span>
+
+    <span class="nd">@Value</span><span class="o">(</span><span class="s">&quot;#{&#39;${server.id}&#39;.split(&#39;,&#39;)}&quot;</span><span class="o">)</span>
+    <span class="kd">private</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">Integer</span><span class="o">&gt;</span> <span class="n">serverId</span><span class="o">;</span>
+    
+    <span class="nd">@Value</span><span class="o">(</span><span class="s">&quot;${server.host:127.0.0.1}&quot;</span><span class="o">)</span>
+    <span class="kd">private</span> <span class="n">String</span> <span class="n">noProKey</span><span class="o">;</span>
+    
+    <span class="nd">@Autowired</span>
+    <span class="kd">private</span> <span class="n">Environment</span> <span class="n">environment</span><span class="o">;</span>
+    
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">readValues</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;Services Size : &quot;</span> <span class="o">+</span> <span class="n">servers</span><span class="o">.</span><span class="na">size</span><span class="o">());</span>
+        <span class="k">for</span><span class="o">(</span><span class="n">String</span> <span class="n">s</span> <span class="o">:</span> <span class="n">servers</span><span class="o">)</span>
+            <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">s</span><span class="o">);</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;ServicesId Size : &quot;</span> <span class="o">+</span> <span class="n">serverId</span><span class="o">.</span><span class="na">size</span><span class="o">());</span>
+        <span class="k">for</span><span class="o">(</span><span class="n">Integer</span> <span class="n">i</span> <span class="o">:</span> <span class="n">serverId</span><span class="o">)</span>
+            <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">i</span><span class="o">);</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;Server Host : &quot;</span> <span class="o">+</span> <span class="n">noProKey</span><span class="o">);</span>
+        <span class="n">String</span> <span class="n">property</span> <span class="o">=</span> <span class="n">environment</span><span class="o">.</span><span class="na">getProperty</span><span class="o">(</span><span class="s">&quot;server.jdbc&quot;</span><span class="o">);</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;Server Jdbc : &quot;</span> <span class="o">+</span> <span class="n">property</span><span class="o">);</span>        
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">AnnotationConfigApplicationContext</span> <span class="n">annotationConfigApplicationContext</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">AnnotationConfigApplicationContext</span><span class="o">(</span><span class="n">AppConfigTest</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+        <span class="n">MockConfigTest</span> <span class="n">mockConfigTest</span> <span class="o">=</span> <span class="o">(</span><span class="n">MockConfigTest</span><span class="o">)</span> <span class="n">annotationConfigApplicationContext</span><span class="o">.</span><span class="na">getBean</span><span class="o">(</span><span class="s">&quot;mockConfigTest&quot;</span><span class="o">);</span>
+        <span class="n">mockConfigTest</span><span class="o">.</span><span class="na">readValues</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">}</span></code></pre></div>
+
+<p>首先使用<strong>@Component</strong>注解声明，接着就是属性字段上的<strong>@Value</strong>注解，但在这里比较特殊，是通过<strong>split()</strong>方法，将配置文件中的9leg，spring分割后组成list对象。心细的同学可能注意到了<strong>server.host</strong>这个key并不存在配置文件中。是的,在这里使用的是默认值，即127.0.0.1,它的格式是这样的。</p>
+
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="nd">@value</span><span class="o">(</span><span class="s">&quot;${key:default}&quot;</span><span class="o">)</span>
+<span class="kd">private</span> <span class="n">String</span> <span class="n">var</span><span class="o">;</span></code></pre></div>
+
+<p>然后注入了<strong>Environment</strong>,可以通过<strong>getProperty(key)</strong>来获取配置文件中的值。
+运行main方法，来看下输出结果：</p>
+
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">Services</span> <span class="n">Size</span> <span class="o">:</span> <span class="mi">2</span>
+<span class="mi">9</span><span class="n">leg</span>
+<span class="n">spring</span>
+<span class="n">ServicesId</span> <span class="n">Size</span> <span class="o">:</span> <span class="mi">3</span>
+<span class="mi">10</span>
+<span class="mi">11</span>
+<span class="mi">12</span>
+<span class="n">Server</span> <span class="n">Host</span> <span class="o">:</span> <span class="mf">127.0</span><span class="o">.</span><span class="mf">0.1</span>
+<span class="n">Server</span> <span class="n">Jdbc</span> <span class="o">:</span> <span class="n">com</span><span class="o">.</span><span class="na">mysql</span><span class="o">.</span><span class="na">jdbc</span><span class="o">.</span><span class="na">Driver</span></code></pre></div>
+
+<p>最后要说一点，在main方法中请使用<strong>new AnnotationConfigApplicationContext(AppConfigTest.class)</strong>来代替<strong>new ClassPathXmlApplicationContext(“applicationContext.xml”)</strong>或者<strong>new FileSystemXmlApplicationContext(“src/main/resources/applicationContext.xml”)</strong>。</p>
+
+<p>原创文章转载请注明出处: <a href="http://9leg.com/spring/2015/02/12/spring-propertysource-value-annotations-example.html">Spring的@PropertySource和@Value注解例子</a></p>
+
+    <div class="bdsharebuttonbox">
+        <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+        <a href="#" class="bds_douban" data-cmd="douban" title="分享到豆瓣网"></a>
+        <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+        <a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博"></a>
+        <a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网"></a>
+        <a href="#" class="bds_mail" data-cmd="mail" title="分享到邮件分享"></a>
+        <a href="#" class="bds_more" data-cmd="more"></a>
+    </div>
+    <nav class="article-previous fn-clear">
+        
+        <a class="prev" href="/maven/2015/02/01/why-is-mvn-archetype-generate-so-low.html" rel="bookmark">&laquo;&nbsp;用maven骨架生成项目速度慢的问题</a>
+        
+        
+        <a class="next" href="/spring/2015/05/06/spring-annotation-primary.html" rel="bookmark">Spring注解@Primary&nbsp;&raquo;</a>
+        
+    </nav>
+    <div class="comment">
+        
+        <div id="disqus_thread"></div>
+        
+    </div>
+</div>
+
+                </div>
+                <div class="aside">
+                    <div class="aside-contact">
+                        <h4 class="title">About me</h4>
+                        <div class="det fn-clear">
+                            <div class="det-image">
+                                <img src="/images/header.jpg" />
+                            </div>
+                            <div class="det-text">
+                                <p>贵在坚持 让梦想照进现实</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="aside-item">
+                        <h4 class="title">Recent Posts</h4>
+                        <ul class="list">
+                            
+                                <li><a href="http://9leg.com/android/2015/07/13/whats-the-difference-between-commit-and-apply-in-shared-preference.html" title="SharedPreference.Editor中commit和apply区别" rel="bookmark">SharedPreference.Editor中commit和apply区别</a></li>
+                            
+                                <li><a href="http://9leg.com/maven/2015/06/30/maven-import-local-jar-and-packing-jar.html" title="Maven引入本地jar包并生成jar包运行修改MANIFEST.MF文件" rel="bookmark">Maven引入本地jar包并生成jar包运行修改MANIFEST.MF文件</a></li>
+                            
+                                <li><a href="http://9leg.com/java/2015/05/07/string-recursive.html" title="String中的无意识递归" rel="bookmark">String中的无意识递归</a></li>
+                            
+                                <li><a href="http://9leg.com/spring/2015/05/06/spring-annotation-primary.html" title="Spring注解@Primary" rel="bookmark">Spring注解@Primary</a></li>
+                            
+                                <li><a href="http://9leg.com/spring/2015/02/12/spring-propertysource-value-annotations-example.html" title="Spring的@PropertySource和@Value注解例子" rel="bookmark">Spring的@PropertySource和@Value注解例子</a></li>
+                            
+                                <li><a href="http://9leg.com/maven/2015/02/01/why-is-mvn-archetype-generate-so-low.html" title="用maven骨架生成项目速度慢的问题" rel="bookmark">用maven骨架生成项目速度慢的问题</a></li>
+                            
+                        </ul>
+                    </div>
+
+                    <div class="aside-item">
+                        <h4 class="title">Links</h4>
+                        <ul class="list">
+                            
+                                
+                                    
+                                    <li><a href="http://droidyue.com/" title="技术小黑屋" target="_blank">技术小黑屋</a></li>
+                                    
+                                    <li><a href="http://jekyllrb.com" title="Jekyll" target="_blank">Jekyll</a></li>
+                                    
+                                    <li><a href="http://www.zhanxin.info/themes.html" title="Jekyll Theme" target="_blank">Jekyll Theme</a></li>
+                                    
+                                
+                            
+                                
+                            
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="foot">
+            <div class="footer">
+                <p>Copyright 2013. All rights reserved. Powered by <a href="http://jekyllrb.com" target="_blank">Jekyll</a>, Design by <a href="http://www.zhanxin.info" target="_blank">zhanxin.info</a>.沪ICP备14040864号</p>
+            </div>
+        </div>
+        <script type="text/javascript" src="http://ajax.useso.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+        
+            
+            <script type="text/javascript">
+                //disqus
+                var disqus_shortname = 'csufuyi';
+                (function() {
+                    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                    dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+                    (document.getElementsByTagName('head')[0] ||
+                        document.getElementsByTagName('body')[0]).appendChild(dsq);
+                })();
+            </script>
+            
+        
+        
+            <script>
+                window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"1","bdSize":"16"},"share":{},"image":{"viewList":["weixin","douban","tsina","tqq","renren","mail"],"viewText":"分享到：","viewSize":"16"},"selectShare":{"bdContainerClass":null,"bdSelectMiniList":["weixin","douban","tsina","tqq","renren","mail"]}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+            </script>
+        
+    </body>
+</html>

@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Java的final关键字 - 9leg</title>
+        <!-- meta -->
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+        <meta name="generator" content="Jekyll" />
+        <meta name="author" content="zhujiajun" />
+        <meta name="description" content="java技术文章" />
+        <meta name="keywords" content="Java blog,Post" />
+        <!-- atom -->
+        <link rel="alternate" type="application/atom+xml" title="Recent Entries" href="http://9leg.com/atom.xml" />
+        <link rel="shortcut icon" href="/images/shortcut.jpg" type="image/x-icon" />
+        <!-- font-awesome -->
+        <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
+        <link href='http://fonts.useso.com/css?family=Spirax' rel='stylesheet' type='text/css'>
+        <link rel="stylesheet" href="http://9leg.com/css/syntax.css">
+        <link rel="stylesheet" href="http://9leg.com/css/main.css">
+        
+        
+
+    </head>
+    <body>
+        <div class="head fn-clear">
+            <div class="header">
+                <h1 class="logo">
+                    <a href="http://9leg.com"><i class="icon-anchor"></i></a>
+                </h1>
+                <nav class="nav">
+                    <ul>
+                        
+                        
+                        
+                        <li class="nav-item ">
+                            <a href="http://9leg.com/index.html">
+                                首页
+                            </a>
+                            
+                        </li>
+                        
+                        
+                        
+                        <li class="nav-item ">
+                            <a href="http://9leg.com/categories.html">
+                                分类目录
+                            </a>
+                            
+                        </li>
+                        
+                        
+                        
+                        <li class="nav-item ">
+                            <a href="http://9leg.com/archives.html">
+                                文章归档
+                            </a>
+                            
+                        </li>
+                        
+                        
+                        
+                        <li class="nav-item ">
+                            <a href="http://9leg.com/about.html">
+                                关于我
+                            </a>
+                            
+                        </li>
+                        
+                        
+                        
+                        <li class="nav-item ">
+                            <a href="http://9leg.com/links.html">
+                                友情链接
+                            </a>
+                            
+                        </li>
+                        
+                    </ul>
+                </nav>
+                <div class="follow">
+                    
+                    <a href="/atom.xml" target="_blank"><i class="icon-rss"></i></a>
+                    
+                    <a href="http://weibo.com/" target="_blank"><i class="icon-weibo"></i></a>
+                    
+                    <a href="http://facebook.com/" target="_blank"><i class="icon-facebook"></i></a>
+                    
+                    <a href="https://github.com/zJiaJun/" target="_blank"><i class="icon-github-alt"></i></a>
+                    
+                    <a href="http://twitter.com/" target="_blank"><i class="icon-twitter"></i></a>
+                    
+                    <a href="https://plus.google.com/116595571760191938657/about" target="_blank"><i class="icon-google-plus"></i></a>
+                    
+                </div>
+            </div>
+        </div>
+        <div class="contain fn-clear">
+            <div class="container fn-clear">
+                <div class="main">
+                    <div class="article article-post">
+    <h2 class="title">Java的final关键字</h2>
+    <div class="info">
+        <span class="info-title"><i class="icon-calendar"></i> Published: </span>
+        <span class="info-date">07 Jan 2015</span>
+        <span class="info-title"><i class="icon-folder-open"></i> Category: </span>
+        <span class="info-link"><a href="http://9leg.com/categories.html#java-ref" >java</a></span>
+    </div>
+    <p>编程语言都有某种方法，来向编译器告知一块数据是恒定不变的。有时数据的恒定不变是很有用的，比如：</p>
+
+<ol>
+  <li>一个永不改变的编译时常量。</li>
+  <li>一个在运行时被初始化的值，而你不希望它被改变。</li>
+</ol>
+
+<h3 id="final">final数据</h3>
+<p>对于基本类型final数值恒定不变的；而用于对象引用，final使引用恒定不变。一旦引用被初始化指向一个对象，就无法再把它改为指向另一个对象。而对象其本身却是可以被修改的。</p>
+
+<h3 id="final-1">final参数</h3>
+<p>java允许在参数列表中以声明的方式将参数指定为final。这表示你无法在方法中更改参数引用所指向的对象。</p>
+
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">class</span> <span class="nc">A</span> <span class="o">{</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">spin</span><span class="o">()</span>
+<span class="o">}</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">B</span> <span class="o">{</span>
+	<span class="kt">void</span> <span class="nf">with</span><span class="o">(</span><span class="kd">final</span> <span class="n">A</span> <span class="n">a</span><span class="o">){</span>
+		<span class="c1">// a = new A(); //wrong -- a is final</span>
+	<span class="o">}</span>
+	<span class="kt">void</span> <span class="nf">without</span><span class="o">(</span><span class="n">A</span> <span class="n">a</span><span class="o">){</span>
+		<span class="n">a</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">A</span><span class="o">();</span><span class="c1">//ok -- a not final</span>
+		<span class="n">a</span><span class="o">.</span><span class="na">spin</span><span class="o">();</span>
+	<span class="o">}</span>
+	<span class="kt">int</span> <span class="nf">f</span><span class="o">(</span><span class="kd">final</span> <span class="kt">int</span> <span class="n">i</span><span class="o">)</span> <span class="o">{</span>
+		<span class="n">i</span><span class="o">++;</span><span class="c1">//can&#39;t change</span>
+		<span class="kt">int</span> <span class="n">ii</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="o">;</span><span class="c1">//ok</span>
+		<span class="k">return</span> <span class="n">ii</span><span class="o">;</span>
+	<span class="o">}</span>
+<span class="o">}</span></code></pre></div>
+
+<p>你可以读参数，但却无法修改参数。</p>
+
+<h3 id="final-2">final方法</h3>
+<p>方法声明final时，表示把方法锁定，以防任何继承类修改它的含义。这是出于设计的考虑：想要确保在继承中使方法行为保持不变，并且不会被覆盖。
+<strong>有一点需要注意。类中所有的private方法都隐式地指定为final的。由于无法取用private方法，所以也就无法覆盖它。可以对private方法添加final修饰词，但这是毫无疑义的。</strong></p>
+
+<h3 id="final-3">final类</h3>
+<p>当将某个类的整体定义为final时，就表示你不打算继续该类，而且也不允许别人这样做。换句话说，对该类的设计永不需要做任何变动,或者出于安全的考虑，不希望它有子类。
+由于final类禁止继承，所以final类中所有的方法都是隐式指定为是final的，因为无法覆盖它们。</p>
+
+<p>参考ThinkInJava</p>
+
+<p>原创文章转载请注明出处：<a href="http://www.9leg.com/java/2015/01/07/final-keyword.html">Java的final关键字</a></p>
+
+    <div class="bdsharebuttonbox">
+        <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+        <a href="#" class="bds_douban" data-cmd="douban" title="分享到豆瓣网"></a>
+        <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+        <a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博"></a>
+        <a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网"></a>
+        <a href="#" class="bds_mail" data-cmd="mail" title="分享到邮件分享"></a>
+        <a href="#" class="bds_more" data-cmd="more"></a>
+    </div>
+    <nav class="article-previous fn-clear">
+        
+        <a class="prev" href="/java/2015/01/05/constructor-init.html" rel="bookmark">&laquo;&nbsp;Java构造器和枚举的初始化</a>
+        
+        
+        <a class="next" href="/java/2015/01/09/java-convert-string-to-enum-object.html" rel="bookmark">Java字符串转枚举类型&nbsp;&raquo;</a>
+        
+    </nav>
+    <div class="comment">
+        
+        <div id="disqus_thread"></div>
+        
+    </div>
+</div>
+
+                </div>
+                <div class="aside">
+                    <div class="aside-contact">
+                        <h4 class="title">About me</h4>
+                        <div class="det fn-clear">
+                            <div class="det-image">
+                                <img src="/images/header.jpg" />
+                            </div>
+                            <div class="det-text">
+                                <p>贵在坚持 让梦想照进现实</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="aside-item">
+                        <h4 class="title">Recent Posts</h4>
+                        <ul class="list">
+                            
+                                <li><a href="http://9leg.com/android/2015/07/13/whats-the-difference-between-commit-and-apply-in-shared-preference.html" title="SharedPreference.Editor中commit和apply区别" rel="bookmark">SharedPreference.Editor中commit和apply区别</a></li>
+                            
+                                <li><a href="http://9leg.com/maven/2015/06/30/maven-import-local-jar-and-packing-jar.html" title="Maven引入本地jar包并生成jar包运行修改MANIFEST.MF文件" rel="bookmark">Maven引入本地jar包并生成jar包运行修改MANIFEST.MF文件</a></li>
+                            
+                                <li><a href="http://9leg.com/java/2015/05/07/string-recursive.html" title="String中的无意识递归" rel="bookmark">String中的无意识递归</a></li>
+                            
+                                <li><a href="http://9leg.com/spring/2015/05/06/spring-annotation-primary.html" title="Spring注解@Primary" rel="bookmark">Spring注解@Primary</a></li>
+                            
+                                <li><a href="http://9leg.com/spring/2015/02/12/spring-propertysource-value-annotations-example.html" title="Spring的@PropertySource和@Value注解例子" rel="bookmark">Spring的@PropertySource和@Value注解例子</a></li>
+                            
+                                <li><a href="http://9leg.com/maven/2015/02/01/why-is-mvn-archetype-generate-so-low.html" title="用maven骨架生成项目速度慢的问题" rel="bookmark">用maven骨架生成项目速度慢的问题</a></li>
+                            
+                        </ul>
+                    </div>
+
+                    <div class="aside-item">
+                        <h4 class="title">Links</h4>
+                        <ul class="list">
+                            
+                                
+                                    
+                                    <li><a href="http://droidyue.com/" title="技术小黑屋" target="_blank">技术小黑屋</a></li>
+                                    
+                                    <li><a href="http://jekyllrb.com" title="Jekyll" target="_blank">Jekyll</a></li>
+                                    
+                                    <li><a href="http://www.zhanxin.info/themes.html" title="Jekyll Theme" target="_blank">Jekyll Theme</a></li>
+                                    
+                                
+                            
+                                
+                            
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="foot">
+            <div class="footer">
+                <p>Copyright 2013. All rights reserved. Powered by <a href="http://jekyllrb.com" target="_blank">Jekyll</a>, Design by <a href="http://www.zhanxin.info" target="_blank">zhanxin.info</a>.沪ICP备14040864号</p>
+            </div>
+        </div>
+        <script type="text/javascript" src="http://ajax.useso.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+        
+            
+            <script type="text/javascript">
+                //disqus
+                var disqus_shortname = 'csufuyi';
+                (function() {
+                    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                    dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+                    (document.getElementsByTagName('head')[0] ||
+                        document.getElementsByTagName('body')[0]).appendChild(dsq);
+                })();
+            </script>
+            
+        
+        
+            <script>
+                window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"1","bdSize":"16"},"share":{},"image":{"viewList":["weixin","douban","tsina","tqq","renren","mail"],"viewText":"分享到：","viewSize":"16"},"selectShare":{"bdContainerClass":null,"bdSelectMiniList":["weixin","douban","tsina","tqq","renren","mail"]}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+            </script>
+        
+    </body>
+</html>

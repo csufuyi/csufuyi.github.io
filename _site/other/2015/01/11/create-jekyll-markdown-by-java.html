@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>初始化Jekyll的markdown文件 - 9leg</title>
+        <!-- meta -->
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+        <meta name="generator" content="Jekyll" />
+        <meta name="author" content="zhujiajun" />
+        <meta name="description" content="java技术文章" />
+        <meta name="keywords" content="Java blog,Post" />
+        <!-- atom -->
+        <link rel="alternate" type="application/atom+xml" title="Recent Entries" href="http://9leg.com/atom.xml" />
+        <link rel="shortcut icon" href="/images/shortcut.jpg" type="image/x-icon" />
+        <!-- font-awesome -->
+        <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
+        <link href='http://fonts.useso.com/css?family=Spirax' rel='stylesheet' type='text/css'>
+        <link rel="stylesheet" href="http://9leg.com/css/syntax.css">
+        <link rel="stylesheet" href="http://9leg.com/css/main.css">
+        
+        
+
+    </head>
+    <body>
+        <div class="head fn-clear">
+            <div class="header">
+                <h1 class="logo">
+                    <a href="http://9leg.com"><i class="icon-anchor"></i></a>
+                </h1>
+                <nav class="nav">
+                    <ul>
+                        
+                        
+                        
+                        <li class="nav-item ">
+                            <a href="http://9leg.com/index.html">
+                                首页
+                            </a>
+                            
+                        </li>
+                        
+                        
+                        
+                        <li class="nav-item ">
+                            <a href="http://9leg.com/categories.html">
+                                分类目录
+                            </a>
+                            
+                        </li>
+                        
+                        
+                        
+                        <li class="nav-item ">
+                            <a href="http://9leg.com/archives.html">
+                                文章归档
+                            </a>
+                            
+                        </li>
+                        
+                        
+                        
+                        <li class="nav-item ">
+                            <a href="http://9leg.com/about.html">
+                                关于我
+                            </a>
+                            
+                        </li>
+                        
+                        
+                        
+                        <li class="nav-item ">
+                            <a href="http://9leg.com/links.html">
+                                友情链接
+                            </a>
+                            
+                        </li>
+                        
+                    </ul>
+                </nav>
+                <div class="follow">
+                    
+                    <a href="/atom.xml" target="_blank"><i class="icon-rss"></i></a>
+                    
+                    <a href="http://weibo.com/" target="_blank"><i class="icon-weibo"></i></a>
+                    
+                    <a href="http://facebook.com/" target="_blank"><i class="icon-facebook"></i></a>
+                    
+                    <a href="https://github.com/zJiaJun/" target="_blank"><i class="icon-github-alt"></i></a>
+                    
+                    <a href="http://twitter.com/" target="_blank"><i class="icon-twitter"></i></a>
+                    
+                    <a href="https://plus.google.com/116595571760191938657/about" target="_blank"><i class="icon-google-plus"></i></a>
+                    
+                </div>
+            </div>
+        </div>
+        <div class="contain fn-clear">
+            <div class="container fn-clear">
+                <div class="main">
+                    <div class="article article-post">
+    <h2 class="title">初始化Jekyll的markdown文件</h2>
+    <div class="info">
+        <span class="info-title"><i class="icon-calendar"></i> Published: </span>
+        <span class="info-date">11 Jan 2015</span>
+        <span class="info-title"><i class="icon-folder-open"></i> Category: </span>
+        <span class="info-link"><a href="http://9leg.com/categories.html#other-ref" >other</a></span>
+    </div>
+    <p>自从用了Jekyll，每次写文章前，在正文开始处都要加入一段描述（<a href="http://jekyllrb.com/docs/frontmatter/" target="_blank">FrontMatter</a>）。下面就是这篇文章的FrontMatter。</p>
+
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="o">---</span>
+<span class="nl">layout:</span> <span class="n">post</span>
+<span class="nl">title:</span> <span class="n">初始化Jekyll的markdown文件</span>
+<span class="nl">date:</span> <span class="mi">2015</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">11</span> <span class="mi">15</span><span class="o">:</span><span class="mi">17</span><span class="o">:</span><span class="mi">32</span>
+<span class="nl">category:</span> <span class="s">&quot;other&quot;</span>
+<span class="o">---</span></code></pre></div>
+
+<p>每次不是复制这段内容，就是再敲一遍(如果Mou编辑器可以设置自定义模版多好啊)。这多low啊，逼格去哪里了？请看下面的代码：</p>
+
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">CreateMDFile</span> <span class="o">{</span>
+	
+	<span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">String</span> <span class="n">USER_HOME</span> <span class="o">=</span> <span class="s">&quot;/Users/zhujiajun&quot;</span><span class="o">;</span>
+	
+	<span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">String</span> <span class="n">POST_DIR</span> <span class="o">=</span> <span class="s">&quot;/Work/_posts&quot;</span><span class="o">;</span>
+	
+	<span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">String</span> <span class="n">MARKDOWN_RULE</span> <span class="o">=</span> <span class="s">&quot;---&quot;</span><span class="o">;</span>
+	
+	<span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">String</span> <span class="n">MARKDOWN_FILE</span> <span class="o">=</span> <span class="s">&quot;.md&quot;</span><span class="o">;</span>
+	
+	<span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">String</span> <span class="n">AUTHOR</span> <span class="o">=</span> <span class="s">&quot;原创文章转载请注明出处: &quot;</span> <span class="o">;</span>
+	
+	<span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">String</span> <span class="n">WEB_SITE</span> <span class="o">=</span> <span class="s">&quot;http://www.9leg.com/&quot;</span><span class="o">;</span>
+	
+	<span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">String</span> <span class="n">HTML</span> <span class="o">=</span> <span class="s">&quot;.html&quot;</span><span class="o">;</span>
+	
+	<span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+		<span class="c1">//default file title</span>
+		<span class="n">String</span> <span class="n">fileTitle</span> <span class="o">=</span> <span class="s">&quot;file-title&quot;</span><span class="o">;</span>
+		<span class="c1">//default post title</span>
+		<span class="n">String</span> <span class="n">postTitle</span> <span class="o">=</span> <span class="s">&quot;PostTitle&quot;</span><span class="o">;</span>
+		<span class="c1">//default post category</span>
+		<span class="n">String</span> <span class="n">postCategory</span> <span class="o">=</span> <span class="s">&quot;java&quot;</span><span class="o">;</span>
+		<span class="c1">//是否转载</span>
+		<span class="kt">boolean</span> <span class="n">isReprint</span> <span class="o">=</span>  <span class="kc">false</span><span class="o">;</span>
+		<span class="c1">//customize</span>
+		<span class="k">if</span> <span class="o">(</span><span class="n">args</span><span class="o">.</span><span class="na">length</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">)</span> <span class="o">{</span>
+			<span class="n">fileTitle</span> <span class="o">=</span> <span class="n">args</span><span class="o">[</span><span class="mi">0</span><span class="o">];</span>
+			<span class="n">postTitle</span> <span class="o">=</span> <span class="n">args</span><span class="o">[</span><span class="mi">1</span><span class="o">];</span>
+			<span class="n">postCategory</span> <span class="o">=</span> <span class="n">args</span><span class="o">[</span><span class="mi">2</span><span class="o">];</span>
+			<span class="n">isReprint</span> <span class="o">=</span> <span class="n">args</span><span class="o">[</span><span class="mi">3</span><span class="o">].</span><span class="na">equals</span><span class="o">(</span><span class="s">&quot;1&quot;</span><span class="o">)</span> <span class="o">?</span> <span class="kc">true</span> <span class="o">:</span> <span class="kc">false</span><span class="o">;</span>
+		<span class="o">}</span> 
+		
+		<span class="n">String</span> <span class="n">userHome</span> <span class="o">=</span> <span class="n">System</span><span class="o">.</span><span class="na">getProperties</span><span class="o">().</span><span class="na">getProperty</span><span class="o">(</span><span class="s">&quot;user.home&quot;</span><span class="o">,</span><span class="n">USER_HOME</span><span class="o">);</span>
+		
+		<span class="n">String</span> <span class="n">fileTime</span> <span class="o">=</span> <span class="n">getFormatTime</span><span class="o">(</span><span class="s">&quot;yyyy-MM-dd&quot;</span><span class="o">);</span>
+		<span class="c1">// /Users/zhujiajun/Work/_posts</span>
+		<span class="n">String</span> <span class="n">fileDir</span> <span class="o">=</span>  <span class="n">userHome</span> <span class="o">+</span> <span class="n">POST_DIR</span><span class="o">;</span>
+		<span class="c1">// /2015-01-11-FileTitle.md</span>
+		<span class="n">String</span> <span class="n">fileName</span> <span class="o">=</span> <span class="n">File</span><span class="o">.</span><span class="na">separator</span> <span class="o">+</span> <span class="n">fileTime</span> <span class="o">+</span> <span class="s">&quot;-&quot;</span> <span class="o">+</span> <span class="n">fileTitle</span> <span class="o">+</span> <span class="n">MARKDOWN_FILE</span><span class="o">;</span>
+		
+		<span class="n">File</span> <span class="n">file</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">File</span><span class="o">(</span><span class="n">fileDir</span> <span class="o">+</span> <span class="n">fileName</span><span class="o">);</span>
+		
+		<span class="n">String</span> <span class="n">postTime</span> <span class="o">=</span> <span class="n">getFormatTime</span><span class="o">(</span><span class="s">&quot;yyyy-MM-dd HH:mm:ss&quot;</span><span class="o">);</span>
+		
+		<span class="n">PrintWriter</span> <span class="n">pw</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+		<span class="k">try</span> <span class="o">{</span>
+			<span class="k">if</span> <span class="o">(!</span><span class="n">file</span><span class="o">.</span><span class="na">exists</span><span class="o">())</span> <span class="o">{</span>
+				<span class="n">file</span><span class="o">.</span><span class="na">createNewFile</span><span class="o">();</span>
+				<span class="n">pw</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">PrintWriter</span><span class="o">(</span><span class="n">file</span><span class="o">,</span><span class="s">&quot;UTF-8&quot;</span><span class="o">);</span>
+				<span class="n">pw</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">MARKDOWN_RULE</span><span class="o">);</span>
+				<span class="n">pw</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;layout: post&quot;</span><span class="o">);</span>
+				<span class="n">pw</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;title: &quot;</span> <span class="o">+</span> <span class="n">postTitle</span><span class="o">);</span>
+				<span class="n">pw</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;date: &quot;</span><span class="o">+</span> <span class="n">postTime</span><span class="o">);</span>
+				<span class="n">pw</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;category: &quot;</span><span class="o">+</span> <span class="s">&quot;\&quot;&quot;</span> <span class="o">+</span> <span class="n">postCategory</span> <span class="o">+</span> <span class="s">&quot;\&quot;&quot;</span><span class="o">);</span>
+				<span class="n">pw</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">MARKDOWN_RULE</span><span class="o">);</span>
+				<span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span><span class="n">i</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="o">;</span><span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+					<span class="n">pw</span><span class="o">.</span><span class="na">println</span><span class="o">();</span><span class="c1">//空行</span>
+				<span class="o">}</span>
+				<span class="n">pw</span><span class="o">.</span><span class="na">println</span><span class="o">(</span>
+						<span class="n">AUTHOR</span> <span class="o">+</span> <span class="s">&quot;[&quot;</span> <span class="o">+</span> <span class="n">postTitle</span> <span class="o">+</span><span class="s">&quot;]&quot;</span> <span class="o">+</span> 
+				<span class="s">&quot;(&quot;</span><span class="o">+</span> <span class="n">WEB_SITE</span> <span class="o">+</span> <span class="n">postCategory</span> <span class="o">+</span> <span class="n">getFormatTime</span><span class="o">(</span><span class="s">&quot;/yyyy/MM/dd/&quot;</span><span class="o">)</span> <span class="o">+</span> <span class="n">fileTitle</span> <span class="o">+</span> <span class="n">HTML</span> <span class="o">+</span><span class="s">&quot;)&quot;</span><span class="o">);</span>
+				<span class="k">if</span> <span class="o">(</span><span class="n">isReprint</span><span class="o">)</span> <span class="o">{</span>
+					<span class="n">pw</span><span class="o">.</span><span class="na">println</span><span class="o">();</span>
+					<span class="n">pw</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;[转载]()&quot;</span><span class="o">);</span>
+				<span class="o">}</span>
+			<span class="o">}</span>
+		<span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">IOException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+			<span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+		<span class="o">}</span> <span class="k">finally</span> <span class="o">{</span>
+			<span class="k">if</span> <span class="o">(</span><span class="n">pw</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+				<span class="n">pw</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
+			<span class="o">}</span>
+		<span class="o">}</span>
+	<span class="o">}</span>
+	
+	<span class="kd">static</span> <span class="kd">private</span> <span class="n">String</span> <span class="nf">getFormatTime</span><span class="o">(</span><span class="n">String</span> <span class="n">pattern</span><span class="o">)</span> <span class="o">{</span>
+		<span class="n">Objects</span><span class="o">.</span><span class="na">requireNonNull</span><span class="o">(</span><span class="n">pattern</span><span class="o">);</span>
+		<span class="n">String</span> <span class="n">formatTime</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">SimpleDateFormat</span><span class="o">(</span><span class="n">pattern</span><span class="o">).</span><span class="na">format</span><span class="o">(</span><span class="k">new</span> <span class="nf">Date</span><span class="o">());</span>
+		<span class="k">return</span> <span class="n">formatTime</span><span class="o">;</span>
+	<span class="o">}</span>
+<span class="o">}</span></code></pre></div>
+
+<p>逼格来了，简单的用java生产文件并写入内容。如果是windows系统需要修改文件路径，我这里的路径是mac系统。对于代码喜欢追求极致，不知道算不算强迫症。代码有什么不妥的地方，请指出。接下来创建个sh脚本方便运行:</p>
+
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">echo</span> <span class="o">---</span><span class="n">Start</span> <span class="n">create</span> <span class="n">markdown</span> <span class="n">file</span><span class="o">---</span>
+<span class="n">cd</span> <span class="n">workspace</span><span class="o">/</span><span class="n">ThinkInJava</span><span class="o">/</span><span class="n">bin</span><span class="o">/</span>
+<span class="n">echo</span> <span class="nl">输入文件标题:</span>
+<span class="n">read</span> <span class="n">filetitle</span>
+<span class="n">echo</span> <span class="nl">输入文章标题:</span>
+<span class="n">read</span> <span class="n">posttitle</span>
+<span class="n">echo</span> <span class="nl">输入文章分类:</span>
+<span class="n">read</span> <span class="n">postcategory</span>
+<span class="n">echo</span> <span class="n">是否转载</span> <span class="n">是</span><span class="err">：</span><span class="mi">1</span> <span class="n">否</span> <span class="err">：</span><span class="mi">2</span>
+<span class="n">read</span> <span class="n">isReprint</span>
+
+<span class="n">java</span> <span class="n">com</span><span class="o">.</span><span class="na">zjiajun</span><span class="o">.</span><span class="na">java</span><span class="o">.</span><span class="na">markdown</span><span class="o">.</span><span class="na">CreateMDFile</span>  <span class="n">$</span><span class="o">{</span><span class="n">filetitle</span><span class="o">}</span> <span class="n">$</span><span class="o">{</span><span class="n">posttitle</span><span class="o">}</span> <span class="n">$</span><span class="o">{</span><span class="n">postcategory</span><span class="o">}</span> <span class="n">$</span><span class="o">{</span><span class="n">isReprint</span><span class="o">}</span>
+
+<span class="n">echo</span> <span class="o">---</span><span class="n">End</span><span class="o">---</span></code></pre></div>
+
+<p>这样就方便多了，运行下sh,自动生成文件头部信息和一些其他的信息，这样就可以更专注内容的写作。</p>
+
+<p>原创文章转载请注明出处: <a href="http://www.9leg.com/other/2015/01/11/create-jekyll-markdown-by-java.html">初始化Jekyll的markdown文件</a></p>
+
+    <div class="bdsharebuttonbox">
+        <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+        <a href="#" class="bds_douban" data-cmd="douban" title="分享到豆瓣网"></a>
+        <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+        <a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博"></a>
+        <a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网"></a>
+        <a href="#" class="bds_mail" data-cmd="mail" title="分享到邮件分享"></a>
+        <a href="#" class="bds_more" data-cmd="more"></a>
+    </div>
+    <nav class="article-previous fn-clear">
+        
+        <a class="prev" href="/java/2015/01/09/java-convert-string-to-enum-object.html" rel="bookmark">&laquo;&nbsp;Java字符串转枚举类型</a>
+        
+        
+        <a class="next" href="/other/2015/01/15/optimization-of-jekyll-blog-access-slow-problem.html" rel="bookmark">优化Jekyll博客访问慢的问题&nbsp;&raquo;</a>
+        
+    </nav>
+    <div class="comment">
+        
+        <div id="disqus_thread"></div>
+        
+    </div>
+</div>
+
+                </div>
+                <div class="aside">
+                    <div class="aside-contact">
+                        <h4 class="title">About me</h4>
+                        <div class="det fn-clear">
+                            <div class="det-image">
+                                <img src="/images/header.jpg" />
+                            </div>
+                            <div class="det-text">
+                                <p>贵在坚持 让梦想照进现实</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="aside-item">
+                        <h4 class="title">Recent Posts</h4>
+                        <ul class="list">
+                            
+                                <li><a href="http://9leg.com/android/2015/07/13/whats-the-difference-between-commit-and-apply-in-shared-preference.html" title="SharedPreference.Editor中commit和apply区别" rel="bookmark">SharedPreference.Editor中commit和apply区别</a></li>
+                            
+                                <li><a href="http://9leg.com/maven/2015/06/30/maven-import-local-jar-and-packing-jar.html" title="Maven引入本地jar包并生成jar包运行修改MANIFEST.MF文件" rel="bookmark">Maven引入本地jar包并生成jar包运行修改MANIFEST.MF文件</a></li>
+                            
+                                <li><a href="http://9leg.com/java/2015/05/07/string-recursive.html" title="String中的无意识递归" rel="bookmark">String中的无意识递归</a></li>
+                            
+                                <li><a href="http://9leg.com/spring/2015/05/06/spring-annotation-primary.html" title="Spring注解@Primary" rel="bookmark">Spring注解@Primary</a></li>
+                            
+                                <li><a href="http://9leg.com/spring/2015/02/12/spring-propertysource-value-annotations-example.html" title="Spring的@PropertySource和@Value注解例子" rel="bookmark">Spring的@PropertySource和@Value注解例子</a></li>
+                            
+                                <li><a href="http://9leg.com/maven/2015/02/01/why-is-mvn-archetype-generate-so-low.html" title="用maven骨架生成项目速度慢的问题" rel="bookmark">用maven骨架生成项目速度慢的问题</a></li>
+                            
+                        </ul>
+                    </div>
+
+                    <div class="aside-item">
+                        <h4 class="title">Links</h4>
+                        <ul class="list">
+                            
+                                
+                                    
+                                    <li><a href="http://droidyue.com/" title="技术小黑屋" target="_blank">技术小黑屋</a></li>
+                                    
+                                    <li><a href="http://jekyllrb.com" title="Jekyll" target="_blank">Jekyll</a></li>
+                                    
+                                    <li><a href="http://www.zhanxin.info/themes.html" title="Jekyll Theme" target="_blank">Jekyll Theme</a></li>
+                                    
+                                
+                            
+                                
+                            
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="foot">
+            <div class="footer">
+                <p>Copyright 2013. All rights reserved. Powered by <a href="http://jekyllrb.com" target="_blank">Jekyll</a>, Design by <a href="http://www.zhanxin.info" target="_blank">zhanxin.info</a>.沪ICP备14040864号</p>
+            </div>
+        </div>
+        <script type="text/javascript" src="http://ajax.useso.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+        
+            
+            <script type="text/javascript">
+                //disqus
+                var disqus_shortname = 'csufuyi';
+                (function() {
+                    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                    dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+                    (document.getElementsByTagName('head')[0] ||
+                        document.getElementsByTagName('body')[0]).appendChild(dsq);
+                })();
+            </script>
+            
+        
+        
+            <script>
+                window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"1","bdSize":"16"},"share":{},"image":{"viewList":["weixin","douban","tsina","tqq","renren","mail"],"viewText":"分享到：","viewSize":"16"},"selectShare":{"bdContainerClass":null,"bdSelectMiniList":["weixin","douban","tsina","tqq","renren","mail"]}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+            </script>
+        
+    </body>
+</html>

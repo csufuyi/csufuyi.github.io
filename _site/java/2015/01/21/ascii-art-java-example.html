@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>用Java生成ASCII艺术字 - 9leg</title>
+        <!-- meta -->
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+        <meta name="generator" content="Jekyll" />
+        <meta name="author" content="zhujiajun" />
+        <meta name="description" content="java技术文章" />
+        <meta name="keywords" content="Java blog,Post" />
+        <!-- atom -->
+        <link rel="alternate" type="application/atom+xml" title="Recent Entries" href="http://9leg.com/atom.xml" />
+        <link rel="shortcut icon" href="/images/shortcut.jpg" type="image/x-icon" />
+        <!-- font-awesome -->
+        <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
+        <link href='http://fonts.useso.com/css?family=Spirax' rel='stylesheet' type='text/css'>
+        <link rel="stylesheet" href="http://9leg.com/css/syntax.css">
+        <link rel="stylesheet" href="http://9leg.com/css/main.css">
+        
+        
+
+    </head>
+    <body>
+        <div class="head fn-clear">
+            <div class="header">
+                <h1 class="logo">
+                    <a href="http://9leg.com"><i class="icon-anchor"></i></a>
+                </h1>
+                <nav class="nav">
+                    <ul>
+                        
+                        
+                        
+                        <li class="nav-item ">
+                            <a href="http://9leg.com/index.html">
+                                首页
+                            </a>
+                            
+                        </li>
+                        
+                        
+                        
+                        <li class="nav-item ">
+                            <a href="http://9leg.com/categories.html">
+                                分类目录
+                            </a>
+                            
+                        </li>
+                        
+                        
+                        
+                        <li class="nav-item ">
+                            <a href="http://9leg.com/archives.html">
+                                文章归档
+                            </a>
+                            
+                        </li>
+                        
+                        
+                        
+                        <li class="nav-item ">
+                            <a href="http://9leg.com/about.html">
+                                关于我
+                            </a>
+                            
+                        </li>
+                        
+                        
+                        
+                        <li class="nav-item ">
+                            <a href="http://9leg.com/links.html">
+                                友情链接
+                            </a>
+                            
+                        </li>
+                        
+                    </ul>
+                </nav>
+                <div class="follow">
+                    
+                    <a href="/atom.xml" target="_blank"><i class="icon-rss"></i></a>
+                    
+                    <a href="http://weibo.com/" target="_blank"><i class="icon-weibo"></i></a>
+                    
+                    <a href="http://facebook.com/" target="_blank"><i class="icon-facebook"></i></a>
+                    
+                    <a href="https://github.com/zJiaJun/" target="_blank"><i class="icon-github-alt"></i></a>
+                    
+                    <a href="http://twitter.com/" target="_blank"><i class="icon-twitter"></i></a>
+                    
+                    <a href="https://plus.google.com/116595571760191938657/about" target="_blank"><i class="icon-google-plus"></i></a>
+                    
+                </div>
+            </div>
+        </div>
+        <div class="contain fn-clear">
+            <div class="container fn-clear">
+                <div class="main">
+                    <div class="article article-post">
+    <h2 class="title">用Java生成ASCII艺术字</h2>
+    <div class="info">
+        <span class="info-title"><i class="icon-calendar"></i> Published: </span>
+        <span class="info-date">21 Jan 2015</span>
+        <span class="info-title"><i class="icon-folder-open"></i> Category: </span>
+        <span class="info-link"><a href="http://9leg.com/categories.html#java-ref" >java</a></span>
+    </div>
+    <p>这是一个有趣的java列子，先来看下效果吧：</p>
+
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">$$$$$$$</span>       <span class="n">$$$$</span>                                                                    
+             <span class="n">$$$$$$$$$$</span>     <span class="n">$$$$</span>                                                                    
+            <span class="n">$$$$$$$$$$$$</span>    <span class="n">$$$$</span>                                                                    
+            <span class="n">$$$$$</span>  <span class="n">$$$$$</span>    <span class="n">$$$$</span>                                                                    
+           <span class="n">$$$$$</span>    <span class="n">$$$$$</span>   <span class="n">$$$$</span>        <span class="n">$$</span>            <span class="n">$$</span>                                            
+           <span class="n">$$$$$</span>    <span class="n">$$$$$</span>   <span class="n">$$$$</span>     <span class="n">$$$$$$$$</span>      <span class="n">$$$$$$$$$$$</span>                                      
+           <span class="n">$$$$$</span>    <span class="n">$$$$$</span>   <span class="n">$$$$</span>    <span class="n">$$$$$$$$$$</span>    <span class="n">$$$$$$$$$$$$</span>                                      
+           <span class="n">$$$$$</span>    <span class="n">$$$$$</span>   <span class="n">$$$$</span>   <span class="n">$$$$$$$$$$$</span>   <span class="n">$$$$$$$$$$$$$</span>                                      
+           <span class="n">$$$$$$</span>  <span class="n">$$$$$$</span>   <span class="n">$$$$</span>   <span class="n">$$$$$</span>  <span class="n">$$$$$</span>  <span class="n">$$$$$</span>   <span class="n">$$$$$</span>                                      
+            <span class="n">$$$$$$$$$$$$$</span>   <span class="n">$$$$</span>   <span class="n">$$$$</span>    <span class="n">$$$$</span>  <span class="n">$$$$$</span>    <span class="n">$$$$</span>                                      
+            <span class="n">$$$$$$$$$$$$$</span>   <span class="n">$$$$</span>   <span class="n">$$$$$$$$$$$$</span>  <span class="n">$$$$</span>     <span class="n">$$$$</span>                                      
+              <span class="n">$$$$$$$$$$$</span>   <span class="n">$$$$</span>   <span class="n">$$$$$$$$$$$$</span>  <span class="n">$$$$</span>     <span class="n">$$$$</span>                                      
+                    <span class="n">$$$$$</span>   <span class="n">$$$$</span>   <span class="n">$$$$$$$$$$$$</span>  <span class="n">$$$$</span>     <span class="n">$$$$</span>                                      
+                    <span class="n">$$$$</span>    <span class="n">$$$$</span>   <span class="n">$$$$$</span>         <span class="n">$$$$$</span>   <span class="n">$$$$$</span>                                      
+                   <span class="n">$$$$$</span>    <span class="n">$$$$</span>   <span class="n">$$$$$</span>         <span class="n">$$$$$$</span> <span class="n">$$$$$$</span>                                      
+            <span class="n">$$$</span>  <span class="n">$$$$$$</span>     <span class="n">$$$$</span>   <span class="n">$$$$$$$$$$$$</span>  <span class="n">$$$$$$$$$$$$$</span>                                      
+            <span class="n">$$$$$$$$$$$</span>     <span class="n">$$$$</span>    <span class="n">$$$$$$$$$$$</span>   <span class="n">$$$$$$$$$$$$</span>                                      
+            <span class="n">$$$$$$$$$</span>       <span class="n">$$$$</span>     <span class="n">$$$$$$$$$$</span>    <span class="n">$$$$$$</span> <span class="n">$$$$</span>                                      
+             <span class="n">$$$$$$</span>                     <span class="n">$$$$</span>             <span class="n">$$$$$</span>                                      
+                                                  <span class="n">$$</span>    <span class="n">$$$$$$</span>                                      
+                                                  <span class="n">$$$$$$$$$$$</span>                                       
+                                                  <span class="n">$$$$$$$$$$$</span>                                       
+                                                  <span class="n">$$$$$$$$$</span></code></pre></div>
+
+<p>实现代码如下：</p>
+
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">ASCIIArt</span> <span class="o">{</span>
+
+  <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span> <span class="o">{</span>
+		 
+    <span class="kt">int</span> <span class="n">width</span> <span class="o">=</span> <span class="mi">100</span><span class="o">;</span>
+	<span class="kt">int</span> <span class="n">height</span> <span class="o">=</span> <span class="mi">30</span><span class="o">;</span>
+		 
+    <span class="c1">//BufferedImage image = ImageIO.read(new File(&quot;/users/zhujiajun/ascii-art.png&quot;));</span>
+		    
+	<span class="n">BufferedImage</span> <span class="n">image</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">BufferedImage</span><span class="o">(</span><span class="n">width</span><span class="o">,</span> <span class="n">height</span><span class="o">,</span> <span class="n">BufferedImage</span><span class="o">.</span><span class="na">TYPE_INT_RGB</span><span class="o">);</span>
+	<span class="n">Graphics</span> <span class="n">g</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="na">getGraphics</span><span class="o">();</span>
+	<span class="n">g</span><span class="o">.</span><span class="na">setFont</span><span class="o">(</span><span class="k">new</span> <span class="nf">Font</span><span class="o">(</span><span class="s">&quot;SansSerif&quot;</span><span class="o">,</span> <span class="n">Font</span><span class="o">.</span><span class="na">BOLD</span><span class="o">,</span> <span class="mi">24</span><span class="o">));</span>
+		 
+	<span class="n">Graphics2D</span> <span class="n">graphics</span> <span class="o">=</span> <span class="o">(</span><span class="n">Graphics2D</span><span class="o">)</span> <span class="n">g</span><span class="o">;</span>
+    <span class="n">graphics</span><span class="o">.</span><span class="na">setRenderingHint</span><span class="o">(</span><span class="n">RenderingHints</span><span class="o">.</span><span class="na">KEY_TEXT_ANTIALIASING</span><span class="o">,</span>
+						<span class="n">RenderingHints</span><span class="o">.</span><span class="na">VALUE_TEXT_ANTIALIAS_ON</span><span class="o">);</span>
+    <span class="n">graphics</span><span class="o">.</span><span class="na">drawString</span><span class="o">(</span><span class="s">&quot;9leg&quot;</span><span class="o">,</span> <span class="mi">10</span><span class="o">,</span> <span class="mi">20</span><span class="o">);</span>
+		 
+	<span class="c1">//save this image</span>
+	<span class="c1">//ImageIO.write(image, &quot;png&quot;, new File(&quot;/users/zhujiajun/ascii-art.png&quot;));</span>
+		 
+    <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">y</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">y</span> <span class="o">&lt;</span> <span class="n">height</span><span class="o">;</span> <span class="n">y</span><span class="o">++)</span> <span class="o">{</span>
+	    <span class="n">StringBuilder</span> <span class="n">sb</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">StringBuilder</span><span class="o">();</span>
+		<span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="n">width</span><span class="o">;</span> <span class="n">x</span><span class="o">++)</span> <span class="o">{</span>
+			<span class="n">sb</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="n">image</span><span class="o">.</span><span class="na">getRGB</span><span class="o">(</span><span class="n">x</span><span class="o">,</span> <span class="n">y</span><span class="o">)</span> <span class="o">==</span> <span class="o">-</span><span class="mi">16777216</span> <span class="o">?</span> <span class="s">&quot; &quot;</span> <span class="o">:</span> <span class="s">&quot;$&quot;</span><span class="o">);</span>
+		<span class="o">}</span>
+		 
+		<span class="k">if</span> <span class="o">(</span><span class="n">sb</span><span class="o">.</span><span class="na">toString</span><span class="o">().</span><span class="na">trim</span><span class="o">().</span><span class="na">isEmpty</span><span class="o">())</span> <span class="o">{</span>
+			<span class="k">continue</span><span class="o">;</span>
+		<span class="o">}</span>
+		 
+		<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">sb</span><span class="o">);</span>
+	<span class="o">}</span>
+		 
+  <span class="o">}</span>
+		 
+<span class="o">}</span></code></pre></div>
+
+<p>-16777216这是什么玩意？
+其实是颜色代码（256 * 256 * 256），在这个列子中”-16777216”被替换为空的字符串“ ”。可以读取保存的图片，并且打印出rgb color，会发现不同的颜色会有不同的代码。</p>
+
+<p>原创文章转载请注明出处: <a href="http://9leg.com/java/2015/01/20/ascii-art-java-example.html">用Java生成ASCII艺术字
+</a></p>
+
+<p><a href="http://www.mkyong.com/java/ascii-art-java-example/" target="_blank">英文原文链接</a></p>
+
+    <div class="bdsharebuttonbox">
+        <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+        <a href="#" class="bds_douban" data-cmd="douban" title="分享到豆瓣网"></a>
+        <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+        <a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博"></a>
+        <a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网"></a>
+        <a href="#" class="bds_mail" data-cmd="mail" title="分享到邮件分享"></a>
+        <a href="#" class="bds_more" data-cmd="more"></a>
+    </div>
+    <nav class="article-previous fn-clear">
+        
+        <a class="prev" href="/other/2015/01/15/optimization-of-jekyll-blog-access-slow-problem.html" rel="bookmark">&laquo;&nbsp;优化Jekyll博客访问慢的问题</a>
+        
+        
+        <a class="next" href="/maven/2015/02/01/why-is-mvn-archetype-generate-so-low.html" rel="bookmark">用maven骨架生成项目速度慢的问题&nbsp;&raquo;</a>
+        
+    </nav>
+    <div class="comment">
+        
+        <div id="disqus_thread"></div>
+        
+    </div>
+</div>
+
+                </div>
+                <div class="aside">
+                    <div class="aside-contact">
+                        <h4 class="title">About me</h4>
+                        <div class="det fn-clear">
+                            <div class="det-image">
+                                <img src="/images/header.jpg" />
+                            </div>
+                            <div class="det-text">
+                                <p>贵在坚持 让梦想照进现实</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="aside-item">
+                        <h4 class="title">Recent Posts</h4>
+                        <ul class="list">
+                            
+                                <li><a href="http://9leg.com/android/2015/07/13/whats-the-difference-between-commit-and-apply-in-shared-preference.html" title="SharedPreference.Editor中commit和apply区别" rel="bookmark">SharedPreference.Editor中commit和apply区别</a></li>
+                            
+                                <li><a href="http://9leg.com/maven/2015/06/30/maven-import-local-jar-and-packing-jar.html" title="Maven引入本地jar包并生成jar包运行修改MANIFEST.MF文件" rel="bookmark">Maven引入本地jar包并生成jar包运行修改MANIFEST.MF文件</a></li>
+                            
+                                <li><a href="http://9leg.com/java/2015/05/07/string-recursive.html" title="String中的无意识递归" rel="bookmark">String中的无意识递归</a></li>
+                            
+                                <li><a href="http://9leg.com/spring/2015/05/06/spring-annotation-primary.html" title="Spring注解@Primary" rel="bookmark">Spring注解@Primary</a></li>
+                            
+                                <li><a href="http://9leg.com/spring/2015/02/12/spring-propertysource-value-annotations-example.html" title="Spring的@PropertySource和@Value注解例子" rel="bookmark">Spring的@PropertySource和@Value注解例子</a></li>
+                            
+                                <li><a href="http://9leg.com/maven/2015/02/01/why-is-mvn-archetype-generate-so-low.html" title="用maven骨架生成项目速度慢的问题" rel="bookmark">用maven骨架生成项目速度慢的问题</a></li>
+                            
+                        </ul>
+                    </div>
+
+                    <div class="aside-item">
+                        <h4 class="title">Links</h4>
+                        <ul class="list">
+                            
+                                
+                                    
+                                    <li><a href="http://droidyue.com/" title="技术小黑屋" target="_blank">技术小黑屋</a></li>
+                                    
+                                    <li><a href="http://jekyllrb.com" title="Jekyll" target="_blank">Jekyll</a></li>
+                                    
+                                    <li><a href="http://www.zhanxin.info/themes.html" title="Jekyll Theme" target="_blank">Jekyll Theme</a></li>
+                                    
+                                
+                            
+                                
+                            
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="foot">
+            <div class="footer">
+                <p>Copyright 2013. All rights reserved. Powered by <a href="http://jekyllrb.com" target="_blank">Jekyll</a>, Design by <a href="http://www.zhanxin.info" target="_blank">zhanxin.info</a>.沪ICP备14040864号</p>
+            </div>
+        </div>
+        <script type="text/javascript" src="http://ajax.useso.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+        
+            
+            <script type="text/javascript">
+                //disqus
+                var disqus_shortname = 'csufuyi';
+                (function() {
+                    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                    dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+                    (document.getElementsByTagName('head')[0] ||
+                        document.getElementsByTagName('body')[0]).appendChild(dsq);
+                })();
+            </script>
+            
+        
+        
+            <script>
+                window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"1","bdSize":"16"},"share":{},"image":{"viewList":["weixin","douban","tsina","tqq","renren","mail"],"viewText":"分享到：","viewSize":"16"},"selectShare":{"bdContainerClass":null,"bdSelectMiniList":["weixin","douban","tsina","tqq","renren","mail"]}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+            </script>
+        
+    </body>
+</html>

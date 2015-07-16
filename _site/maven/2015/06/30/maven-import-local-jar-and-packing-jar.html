@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Maven引入本地jar包并生成jar包运行修改MANIFEST.MF文件 - 9leg</title>
+        <!-- meta -->
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+        <meta name="generator" content="Jekyll" />
+        <meta name="author" content="zhujiajun" />
+        <meta name="description" content="java技术文章" />
+        <meta name="keywords" content="Java blog,Post" />
+        <!-- atom -->
+        <link rel="alternate" type="application/atom+xml" title="Recent Entries" href="http://9leg.com/atom.xml" />
+        <link rel="shortcut icon" href="/images/shortcut.jpg" type="image/x-icon" />
+        <!-- font-awesome -->
+        <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
+        <link href='http://fonts.useso.com/css?family=Spirax' rel='stylesheet' type='text/css'>
+        <link rel="stylesheet" href="http://9leg.com/css/syntax.css">
+        <link rel="stylesheet" href="http://9leg.com/css/main.css">
+        
+        
+
+    </head>
+    <body>
+        <div class="head fn-clear">
+            <div class="header">
+                <h1 class="logo">
+                    <a href="http://9leg.com"><i class="icon-anchor"></i></a>
+                </h1>
+                <nav class="nav">
+                    <ul>
+                        
+                        
+                        
+                        <li class="nav-item ">
+                            <a href="http://9leg.com/index.html">
+                                首页
+                            </a>
+                            
+                        </li>
+                        
+                        
+                        
+                        <li class="nav-item ">
+                            <a href="http://9leg.com/categories.html">
+                                分类目录
+                            </a>
+                            
+                        </li>
+                        
+                        
+                        
+                        <li class="nav-item ">
+                            <a href="http://9leg.com/archives.html">
+                                文章归档
+                            </a>
+                            
+                        </li>
+                        
+                        
+                        
+                        <li class="nav-item ">
+                            <a href="http://9leg.com/about.html">
+                                关于我
+                            </a>
+                            
+                        </li>
+                        
+                        
+                        
+                        <li class="nav-item ">
+                            <a href="http://9leg.com/links.html">
+                                友情链接
+                            </a>
+                            
+                        </li>
+                        
+                    </ul>
+                </nav>
+                <div class="follow">
+                    
+                    <a href="/atom.xml" target="_blank"><i class="icon-rss"></i></a>
+                    
+                    <a href="http://weibo.com/" target="_blank"><i class="icon-weibo"></i></a>
+                    
+                    <a href="http://facebook.com/" target="_blank"><i class="icon-facebook"></i></a>
+                    
+                    <a href="https://github.com/zJiaJun/" target="_blank"><i class="icon-github-alt"></i></a>
+                    
+                    <a href="http://twitter.com/" target="_blank"><i class="icon-twitter"></i></a>
+                    
+                    <a href="https://plus.google.com/116595571760191938657/about" target="_blank"><i class="icon-google-plus"></i></a>
+                    
+                </div>
+            </div>
+        </div>
+        <div class="contain fn-clear">
+            <div class="container fn-clear">
+                <div class="main">
+                    <div class="article article-post">
+    <h2 class="title">Maven引入本地jar包并生成jar包运行修改MANIFEST.MF文件</h2>
+    <div class="info">
+        <span class="info-title"><i class="icon-calendar"></i> Published: </span>
+        <span class="info-date">30 Jun 2015</span>
+        <span class="info-title"><i class="icon-folder-open"></i> Category: </span>
+        <span class="info-link"><a href="http://9leg.com/categories.html#maven-ref" >maven</a></span>
+    </div>
+    <p>由于项目需要发送短信的功能，确定了产品后，开始开发，发现第三方提供的jar没有maven坐标。于是就开启了一系列的坑爹之路，最后还是解决了，纪录下。</p>
+
+<p>先大致介绍下项目环境，以便能够更好的理解。
+首先项目是分多模块的，3个jar包，1个war包。其中2个jar包是任务运行，批处理，监控等，发短信的功能就在其中一个jar中完成。还有个jar是core包，一些通用的公用的类，配置文件，services服务等。war包就是个服务接口，利用SpringMVC完成。</p>
+
+<p>以下所有的修改都在一个任务jar中。</p>
+
+<p>从第三方下载的jar复制到src/main/resources/lib目录下(新建lib目录),</p>
+
+<p>引用方式:</p>
+
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="o">&lt;</span><span class="n">dependency</span><span class="o">&gt;</span>
+	<span class="o">&lt;</span><span class="n">groupId</span><span class="o">&gt;</span><span class="n">SMS_SDK_JAVA</span><span class="o">&lt;/</span><span class="n">groupId</span><span class="o">&gt;</span>
+	<span class="o">&lt;</span><span class="n">artifactId</span><span class="o">&gt;</span><span class="n">SMS_SDK_JAVA</span><span class="o">&lt;/</span><span class="n">artifactId</span><span class="o">&gt;</span>
+	<span class="o">&lt;</span><span class="n">version</span><span class="o">&gt;</span><span class="n">v2</span><span class="o">.</span><span class="mf">6.3</span><span class="n">r</span><span class="o">&lt;/</span><span class="n">version</span><span class="o">&gt;</span>
+	<span class="o">&lt;</span><span class="n">scope</span><span class="o">&gt;</span><span class="n">system</span><span class="o">&lt;/</span><span class="n">scope</span><span class="o">&gt;</span>
+	<span class="o">&lt;</span><span class="n">systemPath</span><span class="o">&gt;</span><span class="n">$</span><span class="o">{</span><span class="n">project</span><span class="o">.</span><span class="na">basedir</span><span class="o">}/</span><span class="n">src</span><span class="o">/</span><span class="n">main</span><span class="o">/</span><span class="n">resources</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">SMS_SDK_JAVA_v2</span><span class="o">.</span><span class="mf">6.3</span><span class="n">r</span><span class="o">.</span><span class="na">jar</span><span class="o">&lt;/</span><span class="n">systemPath</span><span class="o">&gt;</span>
+<span class="o">&lt;/</span><span class="n">dependency</span><span class="o">&gt;</span></code></pre></div>
+
+<p>这里的scope只能是system范围,systemPath属性指定jar的路径。</p>
+
+<p>看下原本的打包方式:</p>
+
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="o">&lt;</span><span class="n">plugin</span><span class="o">&gt;</span>
+	<span class="o">&lt;</span><span class="n">groupId</span><span class="o">&gt;</span><span class="n">org</span><span class="o">.</span><span class="na">apache</span><span class="o">.</span><span class="na">maven</span><span class="o">.</span><span class="na">plugins</span><span class="o">&lt;/</span><span class="n">groupId</span><span class="o">&gt;</span>
+	<span class="o">&lt;</span><span class="n">artifactId</span><span class="o">&gt;</span><span class="n">maven</span><span class="o">-</span><span class="n">jar</span><span class="o">-</span><span class="n">plugin</span><span class="o">&lt;/</span><span class="n">artifactId</span><span class="o">&gt;</span>
+	<span class="o">&lt;</span><span class="n">version</span><span class="o">&gt;</span><span class="mf">2.3</span><span class="o">.</span><span class="mi">2</span><span class="o">&lt;/</span><span class="n">version</span><span class="o">&gt;</span>
+	<span class="o">&lt;</span><span class="n">configuration</span><span class="o">&gt;</span>
+		<span class="o">&lt;</span><span class="n">archive</span><span class="o">&gt;</span>
+			<span class="o">&lt;</span><span class="n">manifest</span><span class="o">&gt;</span>
+				<span class="o">&lt;--</span> <span class="n">在jar包的MF文件中生成Class</span><span class="o">-</span><span class="n">Path属性</span> <span class="o">--&gt;</span>
+				<span class="o">&lt;</span><span class="n">addClasspath</span><span class="o">&gt;</span><span class="kc">true</span><span class="o">&lt;/</span><span class="n">addClasspath</span><span class="o">&gt;</span>
+				<span class="o">&lt;--</span> <span class="n">Class</span><span class="o">-</span><span class="n">Path</span> <span class="n">前缀</span> <span class="o">--&gt;</span>
+				<span class="o">&lt;</span><span class="n">classpathPrefix</span><span class="o">&gt;</span><span class="n">lib</span><span class="o">/&lt;/</span><span class="n">classpathPrefix</span><span class="o">&gt;</span>
+				<span class="o">&lt;--</span> <span class="n">main全限定包名</span> <span class="o">--&gt;</span>
+				<span class="o">&lt;</span><span class="n">mainClass</span><span class="o">&gt;</span><span class="n">xxx</span><span class="o">.</span><span class="na">MainTask</span><span class="o">&lt;/</span><span class="n">mainClass</span><span class="o">&gt;</span>
+			<span class="o">&lt;/</span><span class="n">manifest</span><span class="o">&gt;</span>
+		<span class="o">&lt;/</span><span class="n">archive</span><span class="o">&gt;</span>
+	<span class="o">&lt;/</span><span class="n">configuration</span><span class="o">&gt;</span>
+<span class="o">&lt;/</span><span class="n">plugin</span><span class="o">&gt;</span>
+
+<span class="o">&lt;</span><span class="n">plugin</span><span class="o">&gt;</span>
+	<span class="o">&lt;</span><span class="n">groupId</span><span class="o">&gt;</span><span class="n">org</span><span class="o">.</span><span class="na">apache</span><span class="o">.</span><span class="na">maven</span><span class="o">.</span><span class="na">plugins</span><span class="o">&lt;/</span><span class="n">groupId</span><span class="o">&gt;</span>
+	<span class="o">&lt;</span><span class="n">artifactId</span><span class="o">&gt;</span><span class="n">maven</span><span class="o">-</span><span class="n">assembly</span><span class="o">-</span><span class="n">plugin</span><span class="o">&lt;/</span><span class="n">artifactId</span><span class="o">&gt;</span>
+	<span class="o">&lt;</span><span class="n">version</span><span class="o">&gt;</span><span class="mf">2.3</span><span class="o">&lt;/</span><span class="n">version</span><span class="o">&gt;</span>
+	<span class="o">&lt;</span><span class="n">configuration</span><span class="o">&gt;</span>
+		<span class="o">&lt;</span><span class="n">descriptors</span><span class="o">&gt;</span>
+			<span class="o">&lt;</span><span class="n">descriptor</span><span class="o">&gt;</span><span class="n">src</span><span class="o">/</span><span class="n">main</span><span class="o">/</span><span class="n">resources</span><span class="o">/</span><span class="n">assembly</span><span class="o">.</span><span class="na">xml</span><span class="o">&lt;/</span><span class="n">descriptor</span><span class="o">&gt;</span>
+		<span class="o">&lt;/</span><span class="n">descriptors</span><span class="o">&gt;</span>
+	<span class="o">&lt;/</span><span class="n">configuration</span><span class="o">&gt;</span>
+	<span class="o">&lt;</span><span class="n">executions</span><span class="o">&gt;</span>
+		<span class="o">&lt;</span><span class="n">execution</span><span class="o">&gt;</span>
+			<span class="o">&lt;</span><span class="n">id</span><span class="o">&gt;</span><span class="n">make</span><span class="o">-</span><span class="n">assembly</span><span class="o">&lt;/</span><span class="n">id</span><span class="o">&gt;</span>
+			<span class="o">&lt;</span><span class="n">phase</span><span class="o">&gt;</span><span class="n">package</span><span class="o">&lt;/</span><span class="n">phase</span><span class="o">&gt;</span>
+			<span class="o">&lt;</span><span class="n">goals</span><span class="o">&gt;</span>
+				<span class="o">&lt;</span><span class="n">goal</span><span class="o">&gt;</span><span class="n">single</span><span class="o">&lt;/</span><span class="n">goal</span><span class="o">&gt;</span>
+			<span class="o">&lt;/</span><span class="n">goals</span><span class="o">&gt;</span>
+		<span class="o">&lt;/</span><span class="n">execution</span><span class="o">&gt;</span>
+	<span class="o">&lt;/</span><span class="n">executions</span><span class="o">&gt;</span>
+<span class="o">&lt;/</span><span class="n">plugin</span><span class="o">&gt;</span></code></pre></div>
+
+<p>assembly.xml就不贴出来了，主要工作就是打tar.gz包。
+打出来的jar包中,并不包含system范围的jar包，就是第三方的包。并且在jar包的MF文件的classpath也未找到第三方的lib路径。</p>
+
+<p>最后修改如下:</p>
+
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="o">&lt;</span><span class="n">configuration</span><span class="o">&gt;</span>
+	<span class="o">&lt;</span><span class="n">archive</span><span class="o">&gt;</span>
+		<span class="o">&lt;</span><span class="n">manifest</span><span class="o">&gt;</span>
+			<span class="o">&lt;</span><span class="n">addClasspath</span><span class="o">&gt;</span><span class="kc">true</span><span class="o">&lt;/</span><span class="n">addClasspath</span><span class="o">&gt;</span>
+			<span class="o">&lt;</span><span class="n">classpathPrefix</span><span class="o">&gt;</span><span class="n">lib</span><span class="o">/&lt;/</span><span class="n">classpathPrefix</span><span class="o">&gt;</span>
+			<span class="o">&lt;</span><span class="n">mainClass</span><span class="o">&gt;</span><span class="n">com</span><span class="o">.</span><span class="na">madhouse</span><span class="o">.</span><span class="na">platform</span><span class="o">.</span><span class="na">maddsp</span><span class="o">.</span><span class="na">task</span><span class="o">.</span><span class="na">MainTask</span><span class="o">&lt;/</span><span class="n">mainClass</span><span class="o">&gt;</span>
+		<span class="o">&lt;/</span><span class="n">manifest</span><span class="o">&gt;</span>
+		<span class="o">&lt;--</span> <span class="n">添加classpath缺少的内容</span><span class="o">--&gt;</span>
+		<span class="o">&lt;</span><span class="n">manifestEntries</span><span class="o">&gt;</span>
+			<span class="o">&lt;</span><span class="n">Class</span><span class="o">-</span><span class="n">Path</span><span class="o">&gt;</span><span class="n">lib</span><span class="o">/</span><span class="n">SMS_SDK_JAVA_v2</span><span class="o">.</span><span class="mf">6.3</span><span class="n">r</span><span class="o">.</span><span class="na">jar</span><span class="o">&lt;/</span><span class="n">Class</span><span class="o">-</span><span class="n">Path</span><span class="o">&gt;</span>
+		<span class="o">&lt;/</span><span class="n">manifestEntries</span><span class="o">&gt;</span>
+	<span class="o">&lt;/</span><span class="n">archive</span><span class="o">&gt;</span>
+<span class="o">&lt;/</span><span class="n">configuration</span><span class="o">&gt;</span></code></pre></div>
+
+<p>这样第三方的jar包就包含在classpath中，运行的java -jar xxx.jar的时候，也就不会报NoClassFound错误了。</p>
+
+<p>完整的MF内容如下：</p>
+
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">Manifest</span><span class="o">-</span><span class="nl">Version:</span> <span class="mf">1.0</span>
+<span class="n">Archiver</span><span class="o">-</span><span class="nl">Version:</span> <span class="n">Plexus</span> <span class="n">Archiver</span>
+<span class="n">Created</span><span class="o">-</span><span class="nl">By:</span> <span class="n">Apache</span> <span class="n">Maven</span>
+<span class="n">Built</span><span class="o">-</span><span class="nl">By:</span> <span class="n">zhujiajun</span>
+<span class="n">Build</span><span class="o">-</span><span class="nl">Jdk:</span> <span class="mf">1.7</span><span class="o">.</span><span class="mi">0_72</span>
+<span class="n">Main</span><span class="o">-</span><span class="nl">Class:</span> <span class="n">xxx</span><span class="o">.</span><span class="na">MainTask</span>
+<span class="n">Class</span><span class="o">-</span><span class="nl">Path:</span> <span class="n">lib</span><span class="o">/</span><span class="n">SMS_SDK_JAVA_v2</span><span class="o">.</span><span class="mf">6.3</span><span class="n">r</span><span class="o">.</span><span class="na">jar</span> <span class="n">lib</span><span class="o">/</span><span class="n">org</span><span class="o">.</span><span class="na">apache</span><span class="o">.</span><span class="na">oltu</span><span class="o">.</span><span class="na">oauth2</span><span class="o">.</span><span class="na">resourceserver</span><span class="o">-</span><span class="mf">1.0</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="na">jar</span> <span class="n">l</span>
+ <span class="n">ib</span><span class="o">/</span><span class="n">org</span><span class="o">.</span><span class="na">apache</span><span class="o">.</span><span class="na">oltu</span><span class="o">.</span><span class="na">oauth2</span><span class="o">.</span><span class="na">common</span><span class="o">-</span><span class="mf">1.0</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="na">jar</span> <span class="n">lib</span><span class="o">/</span><span class="n">json</span><span class="o">-</span><span class="mi">20131018</span><span class="o">.</span><span class="na">jar</span> <span class="n">lib</span><span class="o">/</span>
+ <span class="n">org</span><span class="o">.</span><span class="na">apache</span><span class="o">.</span><span class="na">oltu</span><span class="o">.</span><span class="na">oauth2</span><span class="o">.</span><span class="na">resourceserver</span><span class="o">-</span><span class="n">filter</span><span class="o">-</span><span class="mf">1.0</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="na">jar</span> <span class="n">lib</span><span class="o">/</span><span class="n">org</span><span class="o">.</span><span class="na">apache</span>
+ <span class="o">.</span><span class="na">oltu</span><span class="o">.</span><span class="na">oauth2</span><span class="o">.</span><span class="na">client</span><span class="o">-</span><span class="mf">1.0</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="na">jar</span> <span class="n">lib</span><span class="o">/</span><span class="n">druid</span><span class="o">-</span><span class="mf">1.0</span><span class="o">.</span><span class="mi">14</span><span class="o">.</span><span class="na">jar</span> <span class="n">lib</span><span class="o">/</span><span class="n">ehcache</span><span class="o">-</span><span class="n">core</span><span class="o">-</span><span class="mi">2</span>
+ <span class="o">.</span><span class="mf">6.10</span><span class="o">.</span><span class="na">jar</span> <span class="n">lib</span><span class="o">/</span><span class="n">spring</span><span class="o">-</span><span class="n">websocket</span><span class="o">-</span><span class="mf">4.1</span><span class="o">.</span><span class="mi">2</span><span class="o">.</span><span class="na">RELEASE</span><span class="o">.</span><span class="na">jar</span> <span class="n">lib</span><span class="o">/</span><span class="n">spring</span><span class="o">-</span><span class="n">core</span><span class="o">-</span><span class="mf">4.1</span><span class="o">.</span>
+ <span class="mi">2</span><span class="o">.</span><span class="na">RELEASE</span><span class="o">.</span><span class="na">jar</span> <span class="n">lib</span><span class="o">/</span><span class="n">spring</span><span class="o">-</span><span class="n">messaging</span><span class="o">-</span><span class="mf">4.1</span><span class="o">.</span><span class="mi">2</span><span class="o">.</span><span class="na">RELEASE</span><span class="o">.</span><span class="na">jar</span> <span class="n">lib</span><span class="o">/</span><span class="n">spring</span><span class="o">-</span><span class="n">beans</span>
+ <span class="o">-</span><span class="mf">4.1</span><span class="o">.</span><span class="mi">2</span><span class="o">.</span><span class="na">RELEASE</span><span class="o">.</span><span class="na">jar</span> <span class="n">lib</span><span class="o">/</span><span class="n">mail</span><span class="o">-</span><span class="mf">1.4</span><span class="o">.</span><span class="mi">4</span><span class="o">.</span><span class="na">jar</span> <span class="n">lib</span><span class="o">/</span><span class="n">activation</span><span class="o">-</span><span class="mf">1.1</span><span class="o">.</span><span class="na">jar</span> <span class="n">lib</span><span class="o">/</span><span class="n">slf4</span>
+ <span class="n">j</span><span class="o">-</span><span class="n">api</span><span class="o">-</span><span class="mf">1.7</span><span class="o">.</span><span class="mi">5</span><span class="o">.</span><span class="na">jar</span> <span class="n">lib</span><span class="o">/</span><span class="n">logback</span><span class="o">-</span><span class="n">classic</span><span class="o">-</span><span class="mf">1.0</span><span class="o">.</span><span class="mi">11</span><span class="o">.</span><span class="na">jar</span> <span class="n">lib</span><span class="o">/</span><span class="n">logback</span><span class="o">-</span><span class="n">core</span><span class="o">-</span><span class="mf">1.0</span><span class="o">.</span><span class="mi">1</span>
+ <span class="mi">1</span><span class="o">.</span><span class="na">jar</span> <span class="n">lib</span><span class="o">/</span><span class="n">poi</span><span class="o">-</span><span class="mf">3.11</span><span class="o">.</span><span class="na">jar</span> <span class="n">lib</span><span class="o">/</span><span class="n">commons</span><span class="o">-</span><span class="n">codec</span><span class="o">-</span><span class="mf">1.9</span><span class="o">.</span><span class="na">jar</span> <span class="n">lib</span><span class="o">/</span><span class="n">poi</span><span class="o">-</span><span class="n">ooxml</span><span class="o">-</span><span class="mf">3.11</span><span class="o">.</span><span class="na">j</span>
+ <span class="n">ar</span> <span class="n">lib</span><span class="o">/</span><span class="n">poi</span><span class="o">-</span><span class="n">ooxml</span><span class="o">-</span><span class="n">schemas</span><span class="o">-</span><span class="mf">3.11</span><span class="o">.</span><span class="na">jar</span> <span class="n">lib</span><span class="o">/</span><span class="n">xmlbeans</span><span class="o">-</span><span class="mf">2.6</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="na">jar</span> <span class="n">lib</span><span class="o">/</span><span class="n">stax</span><span class="o">-</span><span class="n">api</span>
+ <span class="o">-</span><span class="mf">1.0</span><span class="o">.</span><span class="mi">1</span><span class="o">.</span><span class="na">jar</span> <span class="n">lib</span><span class="o">/</span><span class="n">junit</span><span class="o">-</span><span class="mf">4.10</span><span class="o">.</span><span class="na">jar</span> <span class="n">lib</span><span class="o">/</span><span class="n">hamcrest</span><span class="o">-</span><span class="n">core</span><span class="o">-</span><span class="mf">1.1</span><span class="o">.</span><span class="na">jar</span> <span class="n">lib</span><span class="o">/</span><span class="n">spring</span><span class="o">-</span><span class="n">te</span>
+ <span class="n">st</span><span class="o">-</span><span class="mf">4.1</span><span class="o">.</span><span class="mi">2</span><span class="o">.</span><span class="na">RELEASE</span><span class="o">.</span><span class="na">jar</span> <span class="n">lib</span><span class="o">/</span><span class="n">fastjson</span><span class="o">-</span><span class="mf">1.1</span><span class="o">.</span><span class="mi">37</span><span class="o">.</span><span class="na">jar</span> <span class="n">lib</span><span class="o">/</span><span class="n">commons</span><span class="o">-</span><span class="n">fileupload</span><span class="o">-</span><span class="mi">1</span>
+ <span class="o">.</span><span class="mf">3.1</span><span class="o">.</span><span class="na">jar</span> <span class="n">lib</span><span class="o">/</span><span class="n">commons</span><span class="o">-</span><span class="n">io</span><span class="o">-</span><span class="mf">2.2</span><span class="o">.</span><span class="na">jar</span> <span class="n">lib</span><span class="o">/</span><span class="n">httpmime</span><span class="o">-</span><span class="mf">4.3</span><span class="o">.</span><span class="mi">5</span><span class="o">.</span><span class="na">jar</span> <span class="n">lib</span><span class="o">/</span><span class="n">httpclient</span>
+ <span class="o">-</span><span class="mf">4.3</span><span class="o">.</span><span class="mi">5</span><span class="o">.</span><span class="na">jar</span> <span class="n">lib</span><span class="o">/</span><span class="n">httpcore</span><span class="o">-</span><span class="mf">4.3</span><span class="o">.</span><span class="mi">2</span><span class="o">.</span><span class="na">jar</span> <span class="n">lib</span><span class="o">/</span><span class="n">commons</span><span class="o">-</span><span class="n">logging</span><span class="o">-</span><span class="mf">1.1</span><span class="o">.</span><span class="mi">3</span><span class="o">.</span><span class="na">jar</span> <span class="n">lib</span><span class="o">/</span><span class="n">j</span>
+ <span class="n">stl</span><span class="o">-</span><span class="mf">1.2</span><span class="o">.</span><span class="na">jar</span> <span class="n">lib</span><span class="o">/</span><span class="n">jedis</span><span class="o">-</span><span class="mf">2.6</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="na">jar</span> <span class="n">lib</span><span class="o">/</span><span class="n">commons</span><span class="o">-</span><span class="n">pool2</span><span class="o">-</span><span class="mf">2.0</span><span class="o">.</span><span class="na">jar</span> <span class="n">lib</span><span class="o">/</span><span class="n">mybatis</span>
+ <span class="o">-</span><span class="mf">3.2</span><span class="o">.</span><span class="mi">8</span><span class="o">.</span><span class="na">jar</span> <span class="n">lib</span><span class="o">/</span><span class="n">mybatis</span><span class="o">-</span><span class="n">spring</span><span class="o">-</span><span class="mf">1.2</span><span class="o">.</span><span class="mi">2</span><span class="o">.</span><span class="na">jar</span> <span class="n">lib</span><span class="o">/</span><span class="n">mysql</span><span class="o">-</span><span class="n">connector</span><span class="o">-</span><span class="n">java</span><span class="o">-</span><span class="mf">5.1</span><span class="o">.</span>
+ <span class="mi">31</span><span class="o">.</span><span class="na">jar</span> <span class="n">lib</span><span class="o">/</span><span class="n">spring</span><span class="o">-</span><span class="n">web</span><span class="o">-</span><span class="mf">4.1</span><span class="o">.</span><span class="mi">2</span><span class="o">.</span><span class="na">RELEASE</span><span class="o">.</span><span class="na">jar</span> <span class="n">lib</span><span class="o">/</span><span class="n">spring</span><span class="o">-</span><span class="n">aop</span><span class="o">-</span><span class="mf">4.1</span><span class="o">.</span><span class="mi">2</span><span class="o">.</span><span class="na">RELEASE</span><span class="o">.</span>
+ <span class="n">jar</span> <span class="n">lib</span><span class="o">/</span><span class="n">aopalliance</span><span class="o">-</span><span class="mf">1.0</span><span class="o">.</span><span class="na">jar</span> <span class="n">lib</span><span class="o">/</span><span class="n">spring</span><span class="o">-</span><span class="n">webmvc</span><span class="o">-</span><span class="mf">4.1</span><span class="o">.</span><span class="mi">2</span><span class="o">.</span><span class="na">RELEASE</span><span class="o">.</span><span class="na">jar</span> <span class="n">lib</span><span class="o">/</span><span class="n">s</span>
+ <span class="n">pring</span><span class="o">-</span><span class="n">expression</span><span class="o">-</span><span class="mf">4.1</span><span class="o">.</span><span class="mi">2</span><span class="o">.</span><span class="na">RELEASE</span><span class="o">.</span><span class="na">jar</span> <span class="n">lib</span><span class="o">/</span><span class="n">spring</span><span class="o">-</span><span class="n">context</span><span class="o">-</span><span class="mf">4.1</span><span class="o">.</span><span class="mi">2</span><span class="o">.</span><span class="na">RELEASE</span><span class="o">.</span><span class="na">j</span>
+ <span class="n">ar</span> <span class="n">lib</span><span class="o">/</span><span class="n">spring</span><span class="o">-</span><span class="n">context</span><span class="o">-</span><span class="n">support</span><span class="o">-</span><span class="mf">4.1</span><span class="o">.</span><span class="mi">2</span><span class="o">.</span><span class="na">RELEASE</span><span class="o">.</span><span class="na">jar</span> <span class="n">lib</span><span class="o">/</span><span class="n">spring</span><span class="o">-</span><span class="n">jdbc</span><span class="o">-</span><span class="mf">4.1</span><span class="o">.</span><span class="mi">2</span>
+ <span class="o">.</span><span class="na">RELEASE</span><span class="o">.</span><span class="na">jar</span> <span class="n">lib</span><span class="o">/</span><span class="n">spring</span><span class="o">-</span><span class="n">aspects</span><span class="o">-</span><span class="mf">4.1</span><span class="o">.</span><span class="mi">2</span><span class="o">.</span><span class="na">RELEASE</span><span class="o">.</span><span class="na">jar</span> <span class="n">lib</span><span class="o">/</span><span class="n">aspectjweaver</span><span class="o">-</span><span class="mi">1</span>
+ <span class="o">.</span><span class="mf">8.3</span><span class="o">.</span><span class="na">jar</span> <span class="n">lib</span><span class="o">/</span><span class="n">spring</span><span class="o">-</span><span class="n">tx</span><span class="o">-</span><span class="mf">4.1</span><span class="o">.</span><span class="mi">2</span><span class="o">.</span><span class="na">RELEASE</span><span class="o">.</span><span class="na">jar</span> <span class="n">lib</span><span class="o">/</span><span class="n">spring</span><span class="o">-</span><span class="n">data</span><span class="o">-</span><span class="n">redis</span><span class="o">-</span><span class="mf">1.4</span><span class="o">.</span><span class="mi">2</span><span class="o">.</span>
+ <span class="n">RELEASE</span><span class="o">.</span><span class="na">jar</span></code></pre></div>
+
+<p>另外如果有需要可以定制MF文件,参考<a href="http://maven.apache.org/shared-archives/maven-archiver-LATEST/examples/manifestEntries.html" target="_blank">Apache Maven manifestEntries官网说明</a>
+和<a href="http://www.ibm.com/developerworks/cn/java/j-5things13/" target="_blank">IBM Apache Maven您不知道的5件事</a></p>
+
+<p>原创文章转载请注明出处: <a href="http://9leg.com/maven/2015/06/29/maven-import-local-jar-and-packing-jar.html">Maven引入本地jar包并生成jar包运行</a></p>
+
+    <div class="bdsharebuttonbox">
+        <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+        <a href="#" class="bds_douban" data-cmd="douban" title="分享到豆瓣网"></a>
+        <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+        <a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博"></a>
+        <a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网"></a>
+        <a href="#" class="bds_mail" data-cmd="mail" title="分享到邮件分享"></a>
+        <a href="#" class="bds_more" data-cmd="more"></a>
+    </div>
+    <nav class="article-previous fn-clear">
+        
+        <a class="prev" href="/java/2015/05/07/string-recursive.html" rel="bookmark">&laquo;&nbsp;String中的无意识递归</a>
+        
+        
+        <a class="next" href="/android/2015/07/13/whats-the-difference-between-commit-and-apply-in-shared-preference.html" rel="bookmark">SharedPreference.Editor中commit和apply区别&nbsp;&raquo;</a>
+        
+    </nav>
+    <div class="comment">
+        
+        <div id="disqus_thread"></div>
+        
+    </div>
+</div>
+
+                </div>
+                <div class="aside">
+                    <div class="aside-contact">
+                        <h4 class="title">About me</h4>
+                        <div class="det fn-clear">
+                            <div class="det-image">
+                                <img src="/images/header.jpg" />
+                            </div>
+                            <div class="det-text">
+                                <p>贵在坚持 让梦想照进现实</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="aside-item">
+                        <h4 class="title">Recent Posts</h4>
+                        <ul class="list">
+                            
+                                <li><a href="http://9leg.com/android/2015/07/13/whats-the-difference-between-commit-and-apply-in-shared-preference.html" title="SharedPreference.Editor中commit和apply区别" rel="bookmark">SharedPreference.Editor中commit和apply区别</a></li>
+                            
+                                <li><a href="http://9leg.com/maven/2015/06/30/maven-import-local-jar-and-packing-jar.html" title="Maven引入本地jar包并生成jar包运行修改MANIFEST.MF文件" rel="bookmark">Maven引入本地jar包并生成jar包运行修改MANIFEST.MF文件</a></li>
+                            
+                                <li><a href="http://9leg.com/java/2015/05/07/string-recursive.html" title="String中的无意识递归" rel="bookmark">String中的无意识递归</a></li>
+                            
+                                <li><a href="http://9leg.com/spring/2015/05/06/spring-annotation-primary.html" title="Spring注解@Primary" rel="bookmark">Spring注解@Primary</a></li>
+                            
+                                <li><a href="http://9leg.com/spring/2015/02/12/spring-propertysource-value-annotations-example.html" title="Spring的@PropertySource和@Value注解例子" rel="bookmark">Spring的@PropertySource和@Value注解例子</a></li>
+                            
+                                <li><a href="http://9leg.com/maven/2015/02/01/why-is-mvn-archetype-generate-so-low.html" title="用maven骨架生成项目速度慢的问题" rel="bookmark">用maven骨架生成项目速度慢的问题</a></li>
+                            
+                        </ul>
+                    </div>
+
+                    <div class="aside-item">
+                        <h4 class="title">Links</h4>
+                        <ul class="list">
+                            
+                                
+                                    
+                                    <li><a href="http://droidyue.com/" title="技术小黑屋" target="_blank">技术小黑屋</a></li>
+                                    
+                                    <li><a href="http://jekyllrb.com" title="Jekyll" target="_blank">Jekyll</a></li>
+                                    
+                                    <li><a href="http://www.zhanxin.info/themes.html" title="Jekyll Theme" target="_blank">Jekyll Theme</a></li>
+                                    
+                                
+                            
+                                
+                            
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="foot">
+            <div class="footer">
+                <p>Copyright 2013. All rights reserved. Powered by <a href="http://jekyllrb.com" target="_blank">Jekyll</a>, Design by <a href="http://www.zhanxin.info" target="_blank">zhanxin.info</a>.沪ICP备14040864号</p>
+            </div>
+        </div>
+        <script type="text/javascript" src="http://ajax.useso.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+        
+            
+            <script type="text/javascript">
+                //disqus
+                var disqus_shortname = 'csufuyi';
+                (function() {
+                    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                    dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+                    (document.getElementsByTagName('head')[0] ||
+                        document.getElementsByTagName('body')[0]).appendChild(dsq);
+                })();
+            </script>
+            
+        
+        
+            <script>
+                window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"1","bdSize":"16"},"share":{},"image":{"viewList":["weixin","douban","tsina","tqq","renren","mail"],"viewText":"分享到：","viewSize":"16"},"selectShare":{"bdContainerClass":null,"bdSelectMiniList":["weixin","douban","tsina","tqq","renren","mail"]}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+            </script>
+        
+    </body>
+</html>
